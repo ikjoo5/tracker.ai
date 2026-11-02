@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ArrowDown, ArrowDownToLine, ArrowRight, ArrowUpRight, Box, Braces, Check, ChevronRight, CircleDot, Code2, Database, FileJson, Focus, Github, Layers3, Menu, Move3D, Play, ScanLine, ShieldCheck, Store, Video, X } from 'lucide-react';
 import './landing.css';
 
-const REPOSITORY = 'https://github.com/ikjoo5/cafe.ai';
+const REPOSITORY = 'https://github.com/ikjoo5/tracker.ai';
 const asset = (name: string) => `${import.meta.env.BASE_URL}showcase/${name}`;
 const source = 'https://github.com/intel-iot-devkit/sample-videos/blob/57978890822836f2b4743852f04f62fc511757e4/store-aisle-detection.mp4';
 const steps = [

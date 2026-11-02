@@ -1,8 +1,8 @@
 # GitHub Pages deployment
 
-The project deployment target is `https://ikjoo5.github.io/cafe.ai/`. Pages hosts the static introduction, public example images/video/data, and a read-only analysis workspace. It does not run FastAPI or video inference.
+The project deployment target is `https://ikjoo5.github.io/tracker.ai/`. Pages hosts the static introduction, public example images/video/data, and a read-only analysis workspace. It does not run FastAPI or video inference.
 
-The website and documentation are branded **tracker.ai**. The existing repository name and `/cafe.ai/` project path are intentionally preserved.
+The canonical repository is **ikjoo5/tracker.ai**, following the repository move reported by GitHub. The Pages workflow derives its project base path from the repository name. The root personal website remains unchanged.
 
 ## Automated deployment
 
@@ -10,14 +10,14 @@ The website and documentation are branded **tracker.ai**. The existing repositor
 
 1. Set up Node.js 22 and install the lockfile with `npm ci`.
 2. Validate floor projection with `npm run test:floor`.
-3. Build Vite for `/cafe.ai/` in static showcase mode.
+3. Build Vite for `/tracker.ai/` in static showcase mode.
 4. Upload the Pages artifact.
 5. Deploy to the `github-pages` environment.
 
 The build uses these non-secret variables:
 
 ```text
-VITE_BASE_PATH=/cafe.ai/
+VITE_BASE_PATH=/tracker.ai/
 VITE_STATIC_SHOWCASE=true
 ```
 
@@ -25,7 +25,7 @@ Images, video, records, and JavaScript bundles use `import.meta.env.BASE_URL`. T
 
 ## First-time Pages activation
 
-If Pages is not enabled, a repository administrator can select **Settings → Pages → Build and deployment → Source → GitHub Actions** for **`ikjoo5/cafe.ai`**. Then rerun the `Deploy project site` workflow.
+If Pages is not enabled, a repository administrator can select **Settings → Pages → Build and deployment → Source → GitHub Actions** for **`ikjoo5/tracker.ai`**. Then rerun the `Deploy project site` workflow.
 
 Normal deployment uses the default `GITHUB_TOKEN` and does not require a personal token. First-time activation has different permissions: the [official `actions/configure-pages@v5` definition](https://github.com/actions/configure-pages/blob/v5/action.yml) states that `enablement: true` requires a token other than the default `GITHUB_TOKEN`. The workflow therefore does not attempt automatic activation.
 
@@ -43,11 +43,11 @@ Do not paste tokens into chat. Reuse the platform’s existing GitHub connection
 
 ```bash
 npm ci
-VITE_BASE_PATH=/cafe.ai/ VITE_STATIC_SHOWCASE=true npm run build
-VITE_BASE_PATH=/cafe.ai/ npm run preview
+VITE_BASE_PATH=/tracker.ai/ VITE_STATIC_SHOWCASE=true npm run build
+VITE_BASE_PATH=/tracker.ai/ npm run preview
 ```
 
-Open the preview server’s `/cafe.ai/` path and check images, video, downloads, and the workspace. The demo is actual Intel store footage processed by the detector. Concept images are separately labeled and are not presented as measured output.
+Open the preview server’s `/tracker.ai/` path and check images, video, downloads, and the workspace. The demo is actual Intel store footage processed by the detector. Concept images are separately labeled and are not presented as measured output.
 
 ## Verify publication
 
@@ -68,4 +68,4 @@ Publishing the inference API would require separate authentication, user data is
 
 ## Preserve the personal homepage
 
-This deployment targets only the `/cafe.ai/` project path of the **`ikjoo5/cafe.ai`** repository. It does not change the **`ikjoo5/ikjoo5.github.io`** repository, the root personal homepage, CNAME, or user-site settings.
+This deployment targets only the `/tracker.ai/` project path of the **`ikjoo5/tracker.ai`** repository. It does not change the **`ikjoo5/ikjoo5.github.io`** repository, the root personal homepage, CNAME, or user-site settings.

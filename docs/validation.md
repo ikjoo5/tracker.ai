@@ -49,7 +49,7 @@ The floor calibration is specific to the Intel clip. A different video receives 
 
 ## Static project website
 
-`node scripts/test-site.mjs` passed against the `/cafe.ai/` preview path. Checks covered:
+`node scripts/test-site.mjs` passed against the `/tracker.ai/` preview path. Checks covered:
 
 - Images decode successfully, and generated scenarios are labeled as concepts.
 - Actual raw/BBox comparison, pipeline stage selection, and concept/measured 3D views work.

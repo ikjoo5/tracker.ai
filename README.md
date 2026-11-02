@@ -4,7 +4,7 @@
 
 A prototype pipeline from CCTV footage to person detection, temporary tracks, observation records, floor projection, and a 3D dwell map. Explore actual housewares-store footage, inspect BBoxes and movement trails, and see how observations accumulate over time.
 
-[Project site deployment target](https://ikjoo5.github.io/cafe.ai/) · [Pipeline documentation](docs/pipeline.md) · [Deployment guide](docs/deployment.md)
+[Project site deployment target](https://ikjoo5.github.io/tracker.ai/) · [Pipeline documentation](docs/pipeline.md) · [Deployment guide](docs/deployment.md)
 
 ![3D dwell heatmap derived from actual store observations](public/showcase/dwell-3d.png)
 
@@ -44,8 +44,8 @@ The tracker produced 18 temporary IDs, including fragments caused by occlusion. 
 Requirements: Python 3.12, Node.js 22.12 or newer, npm, and FFmpeg.
 
 ```bash
-git clone https://github.com/ikjoo5/cafe.ai.git
-cd cafe.ai
+git clone https://github.com/ikjoo5/tracker.ai.git
+cd tracker.ai
 bash scripts/setup.sh
 bash scripts/dev.sh
 ```

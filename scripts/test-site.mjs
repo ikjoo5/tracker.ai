@@ -2,7 +2,7 @@ import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
-const base = process.env.SITE_URL || 'http://127.0.0.1:4173/cafe.ai/';
+const base = process.env.SITE_URL || 'http://127.0.0.1:4173/tracker.ai/';
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', headless: true,
   args: ['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1050 } });
