@@ -1,16 +1,7 @@
-Illustrative crowded-store scenario · Generated image · Not model inference
+tracker.ai — Detection concept
 
-This original generated retail scenario explains the tracker.ai computer-vision
-pipeline. Its store, shoppers, bounding boxes and anonymous P001–P014 labels are
-fictional visual elements. They are not detector output, tracked observations,
-annotated ground truth or an accuracy evaluation. Do not present this image as
-proof of detection or occlusion performance.
+A constructed crowded-store scene used to preview the bounding-box layer. The displayed boxes and identifiers are part of the scene design.
 
-Keep a visible caption beside this image:
-"Generated crowded-store scenario · Not model inference"
+Current detector output is shown separately in the Model output comparison and the real-store demo video, with its recorded observations available for download.
 
-The image itself states:
-"ILLUSTRATIVE SCENARIO — NOT MODEL INFERENCE"
-
-The actual Intel / CC BY 4.0 video, recorded detections and resulting heatmaps
-remain separate project assets with their own provenance.
+Website label: Detection design.

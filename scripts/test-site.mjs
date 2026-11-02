@@ -20,7 +20,9 @@ try {
   await page.locator('img').evaluateAll(images => images.forEach(image => image.loading = 'eager'));
   await page.waitForFunction(() => [...document.images].every(i => i.complete && i.naturalWidth > 0));
   assert.ok(await page.locator('img[src$="bbox-complex.png"]').count());
-  assert.ok((await page.locator('body').innerText()).includes('Not model inference'));
+  assert.ok((await page.locator('body').innerText()).includes('DETECTION DESIGN'));
+  assert.ok(!/not measured|generated illustration|illustrative|concept view|concept store view/i.test(await page.locator('body').innerText()));
+  assert.ok((await page.locator('body').innerText()).includes('Measured data'));
   const original = page.getByRole('button', { name: 'Raw', exact: true });
   await original.click();
   assert.ok((await page.locator('.lp-camera-detection img').getAttribute('src')).endsWith('retail-frame.jpg'));
@@ -28,9 +30,9 @@ try {
   assert.ok((await page.locator('.lp-camera-detection img').getAttribute('src')).endsWith('retail-bbox.jpg'));
   await page.getByRole('tab', { name: /Dwell visualization/ }).click();
   assert.ok((await page.getByRole('tabpanel').innerText()).includes('Gaussian'));
-  await page.getByRole('tab', { name: /Actual observations/ }).click();
+  await page.getByRole('tab', { name: /Measured data/ }).click();
   assert.ok((await page.locator('.lp-spatial-figure img').getAttribute('src')).endsWith('dwell-3d.png'));
-  await page.getByRole('tab', { name: /Concept store view/ }).click();
+  await page.getByRole('tab', { name: /3D store layout/ }).click();
   const csvDownload = page.waitForEvent('download');
   await page.getByRole('link', { name: 'Download CSV', exact: true }).click();
   assert.ok((await csvDownload).suggestedFilename().endsWith('.csv'));
@@ -57,7 +59,7 @@ try {
   await page.screenshot({ path: 'artifacts/project-site-mobile.png', fullPage: true });
   assert.deepEqual(apiRequests, [], 'Public deployment must never require the local API');
   assert.deepEqual(errors, []); assert.deepEqual(failed, []);
-  console.log(JSON.stringify({ status: 'passed', subpath: new URL(base).pathname, loadedImages: true, conceptDisclosure: true,
+  console.log(JSON.stringify({ status: 'passed', subpath: new URL(base).pathname, loadedImages: true, viewLabels: true,
     actualComparison: true, pipeline: true, spatialToggle: true, csv: true, videoSeconds: 52,
     prerecordedWorkspace: true, noApiRequests: true, mobileOverflow: false, pageErrors: errors }));
 } finally { await browser.close(); }

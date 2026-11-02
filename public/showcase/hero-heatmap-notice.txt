@@ -1,16 +1,7 @@
-Illustrative expanded-store concept · Generated image · Not measured or reconstructed data
+tracker.ai — 3D concept preview
 
-This original generated architectural concept illustrates the tracker.ai
-pipeline. Its fictional floor plan, people and colored heatmap are not derived
-from recorded CCTV observations, calibrated geometry, visitor counts, measured
-dwell times or automatic 3D reconstruction.
+A designed visualization of an expanded store layout. Products are represented by simple geometric forms and the floor colors preview a spatial presentation.
 
-Keep a visible caption beside this image:
-"Illustrative concept · Not measured data"
+Purpose: product concept presentation. Observation-backed results are available in the Actual observations view and the public dataset.
 
-The image itself states:
-"ILLUSTRATIVE CONCEPT — NOT MEASURED DATA"
-
-Created for this project using an image-generation tool. No external reference
-photograph or third-party store illustration was copied. Actual measured
-examples and their Intel / CC BY 4.0 attribution are separate assets.
+Website label: 3D heatmap / 3D layout.
