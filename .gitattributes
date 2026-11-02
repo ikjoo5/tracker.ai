@@ -1,0 +1,6 @@
+*.csv text eol=lf
+*.mp4 binary
+*.png binary
+*.jpg binary
+docs/licenses/*.txt -whitespace
+public/showcase/license.txt -whitespace

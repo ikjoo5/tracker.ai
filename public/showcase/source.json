@@ -1,0 +1,24 @@
+{
+  "title": "store-aisle-detection.mp4",
+  "creator": "Intel IoT DevKit / sample-videos contributors",
+  "source_url": "https://github.com/intel-iot-devkit/sample-videos/blob/57978890822836f2b4743852f04f62fc511757e4/store-aisle-detection.mp4",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "repository_license_url": "https://github.com/intel-iot-devkit/sample-videos/blob/57978890822836f2b4743852f04f62fc511757e4/LICENSE",
+  "source_revision": "57978890822836f2b4743852f04f62fc511757e4",
+  "source_sha256": "3526fee39cac70d6366471e4324a6d63b337c8f8ab99c015521bee0d60ed6e04",
+  "original_start_seconds": 8,
+  "original_end_seconds": 60,
+  "changes": "Original 00:08–01:00 excerpt; resampled to 15 fps; audio removed; H.264 transcoding. Analysis outputs add anonymous BBoxes, trails and dwell heatmaps.",
+  "scene": "Actual housewares retail store; fixed elevated camera. Not a supermarket food aisle, simulation or generated video.",
+  "attribution": "Intel IoT DevKit sample-videos contributors · CC BY 4.0 · modified excerpt",
+  "license_notice": "See docs/licenses/intel-sample-videos-CC-BY-4.0.txt. No endorsement implied.",
+  "public_assets": {
+    "retail-frame.jpg": "Actual source frame, clip time22s / original time30s.",
+    "retail-bbox.jpg": "Actual detector/tracker output at clip time22s / original time30s; attribution overlay added.",
+    "dwell-3d.png": "Actual projected footpoints and duration, manually reconstructed scene, not surveyed floorplan.",
+    "accumulation.png": "Real observation prefixes 0–13/26/52 seconds, same maximum color scale; no invented observations.",
+    "demo-source.mp4": "52-second actual source excerpt, muted, resampled15fps, compressed for static preview.",
+    "demo-bbox.mp4": "Actual52-second detector/tracker output with source attribution."
+  }
+}

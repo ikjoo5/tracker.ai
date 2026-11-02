@@ -1,0 +1,120 @@
+{
+  "description": "Original synthetic overhead mart illustration; actors and timings are simulated. Person counts are computed from video pixels.",
+  "license": "Original project artwork; no third-party footage or real personal data.",
+  "width": 1280,
+  "height": 720,
+  "fps": 15,
+  "duration": 36,
+  "markers": [
+    {
+      "id": "P01",
+      "color": [
+        232,
+        121,
+        50
+      ],
+      "role": "person"
+    },
+    {
+      "id": "P02",
+      "color": [
+        244,
+        189,
+        80
+      ],
+      "role": "person"
+    },
+    {
+      "id": "P03",
+      "color": [
+        89,
+        182,
+        161
+      ],
+      "role": "person"
+    },
+    {
+      "id": "P04",
+      "color": [
+        105,
+        159,
+        232
+      ],
+      "role": "person"
+    },
+    {
+      "id": "P05",
+      "color": [
+        193,
+        139,
+        224
+      ],
+      "role": "person"
+    },
+    {
+      "id": "P06",
+      "color": [
+        231,
+        119,
+        151
+      ],
+      "role": "person"
+    },
+    {
+      "id": "P07",
+      "color": [
+        122,
+        199,
+        220
+      ],
+      "role": "person"
+    },
+    {
+      "id": "P08",
+      "color": [
+        168,
+        188,
+        102
+      ],
+      "role": "person"
+    }
+  ],
+  "zones": [
+    {
+      "id": "produce",
+      "label": "신선식품",
+      "x": 0.05,
+      "y": 0.08,
+      "w": 0.4,
+      "h": 0.4,
+      "color": "#e87932"
+    },
+    {
+      "id": "aisle",
+      "label": "중앙매대",
+      "x": 0.48,
+      "y": 0.1,
+      "w": 0.15,
+      "h": 0.4,
+      "color": "#699fe8"
+    },
+    {
+      "id": "checkout",
+      "label": "계산대",
+      "x": 0.48,
+      "y": 0.52,
+      "w": 0.15,
+      "h": 0.16,
+      "color": "#c18be0"
+    },
+    {
+      "id": "household",
+      "label": "생활용품",
+      "x": 0.66,
+      "y": 0.12,
+      "w": 0.3,
+      "h": 0.8,
+      "color": "#59b6a1"
+    }
+  ]
+}

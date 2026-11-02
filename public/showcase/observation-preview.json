@@ -1,0 +1,311 @@
+{
+  "source": {
+    "name": "공개 생활용품 매장 · Intel 샘플",
+    "kind": "public-retail",
+    "duration": 52,
+    "width": 720,
+    "height": 404,
+    "fps": 15,
+    "detector": "opencv-mobilenet-ssd-person",
+    "model_revision": "bb17b6c3eef36d80be441ae8e5339be66e8e3b7a",
+    "provenance": {
+      "title": "store-aisle-detection.mp4",
+      "creator": "Intel IoT DevKit / sample-videos contributors",
+      "source_url": "https://github.com/intel-iot-devkit/sample-videos/blob/57978890822836f2b4743852f04f62fc511757e4/store-aisle-detection.mp4",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "repository_license_url": "https://github.com/intel-iot-devkit/sample-videos/blob/57978890822836f2b4743852f04f62fc511757e4/LICENSE",
+      "source_revision": "57978890822836f2b4743852f04f62fc511757e4",
+      "source_sha256": "3526fee39cac70d6366471e4324a6d63b337c8f8ab99c015521bee0d60ed6e04",
+      "original_start_seconds": 8,
+      "original_end_seconds": 60,
+      "changes": "Original 00:08–01:00 excerpt; resampled to 15 fps; audio removed; H.264 transcoding. Analysis outputs add anonymous BBoxes, trails and dwell heatmaps.",
+      "scene": "Actual housewares retail store; fixed elevated camera. Not a supermarket food aisle, simulation or generated video.",
+      "attribution": "Intel IoT DevKit sample-videos contributors · CC BY 4.0 · modified excerpt",
+      "license_notice": "See docs/licenses/intel-sample-videos-CC-BY-4.0.txt. No endorsement implied."
+    }
+  },
+  "provenance": {
+    "title": "store-aisle-detection.mp4",
+    "creator": "Intel IoT DevKit / sample-videos contributors",
+    "source_url": "https://github.com/intel-iot-devkit/sample-videos/blob/57978890822836f2b4743852f04f62fc511757e4/store-aisle-detection.mp4",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "repository_license_url": "https://github.com/intel-iot-devkit/sample-videos/blob/57978890822836f2b4743852f04f62fc511757e4/LICENSE",
+    "source_revision": "57978890822836f2b4743852f04f62fc511757e4",
+    "source_sha256": "3526fee39cac70d6366471e4324a6d63b337c8f8ab99c015521bee0d60ed6e04",
+    "original_start_seconds": 8,
+    "original_end_seconds": 60,
+    "changes": "Original 00:08–01:00 excerpt; resampled to 15 fps; audio removed; H.264 transcoding. Analysis outputs add anonymous BBoxes, trails and dwell heatmaps.",
+    "scene": "Actual housewares retail store; fixed elevated camera. Not a supermarket food aisle, simulation or generated video.",
+    "attribution": "Intel IoT DevKit sample-videos contributors · CC BY 4.0 · modified excerpt",
+    "license_notice": "See docs/licenses/intel-sample-videos-CC-BY-4.0.txt. No endorsement implied."
+  },
+  "metrics": {
+    "unique_people": 18,
+    "confirmed_tracks": 16,
+    "peak_people": 5,
+    "total_person_seconds": 123.996,
+    "observed_seconds": 52,
+    "detections": 372,
+    "duration": 52,
+    "frames": 156,
+    "mappedObservations": 296,
+    "mappedPersonSeconds": 98.66499999999995,
+    "excludedPersonSeconds": 25.330999999999957
+  },
+  "rows": [
+    {
+      "time": 1.333,
+      "time_seconds": 1.333,
+      "track_id": "T001",
+      "bbox": [
+        0.66072,
+        0.4809,
+        0.32273,
+        0.5191
+      ],
+      "confidence": 0.95422,
+      "zone": "household",
+      "sample_seconds": 0.334
+    },
+    {
+      "time": 1.667,
+      "time_seconds": 1.667,
+      "track_id": "T001",
+      "bbox": [
+        0.64199,
+        0.44066,
+        0.29542,
+        0.55568
+      ],
+      "confidence": 0.8775,
+      "zone": "household",
+      "sample_seconds": 0.333
+    },
+    {
+      "time": 2,
+      "time_seconds": 2,
+      "track_id": "T001",
+      "bbox": [
+        0.64518,
+        0.42209,
+        0.2458,
+        0.5699
+      ],
+      "confidence": 0.97772,
+      "zone": "household",
+      "sample_seconds": 0.333
+    },
+    {
+      "time": 2.333,
+      "time_seconds": 2.333,
+      "track_id": "T001",
+      "bbox": [
+        0.64708,
+        0.31761,
+        0.22204,
+        0.68061
+      ],
+      "confidence": 0.96313,
+      "zone": "household",
+      "sample_seconds": 0.334
+    },
+    {
+      "time": 2.667,
+      "time_seconds": 2.667,
+      "track_id": "T001",
+      "bbox": [
+        0.65652,
+        0.25056,
+        0.18435,
+        0.74944
+      ],
+      "confidence": 0.91661,
+      "zone": "household",
+      "sample_seconds": 0.333
+    },
+    {
+      "time": 3,
+      "time_seconds": 3,
+      "track_id": "T001",
+      "bbox": [
+        0.6128,
+        0.32348,
+        0.20646,
+        0.67652
+      ],
+      "confidence": 0.99166,
+      "zone": "household",
+      "sample_seconds": 0.333
+    }
+  ],
+  "records": [
+    {
+      "time": 1.333,
+      "time_seconds": 1.333,
+      "track_id": "T001",
+      "bbox": [
+        0.66072,
+        0.4809,
+        0.32273,
+        0.5191
+      ],
+      "confidence": 0.95422,
+      "zone": "household",
+      "sample_seconds": 0.334
+    },
+    {
+      "time": 1.667,
+      "time_seconds": 1.667,
+      "track_id": "T001",
+      "bbox": [
+        0.64199,
+        0.44066,
+        0.29542,
+        0.55568
+      ],
+      "confidence": 0.8775,
+      "zone": "household",
+      "sample_seconds": 0.333
+    },
+    {
+      "time": 2,
+      "time_seconds": 2,
+      "track_id": "T001",
+      "bbox": [
+        0.64518,
+        0.42209,
+        0.2458,
+        0.5699
+      ],
+      "confidence": 0.97772,
+      "zone": "household",
+      "sample_seconds": 0.333
+    },
+    {
+      "time": 2.333,
+      "time_seconds": 2.333,
+      "track_id": "T001",
+      "bbox": [
+        0.64708,
+        0.31761,
+        0.22204,
+        0.68061
+      ],
+      "confidence": 0.96313,
+      "zone": "household",
+      "sample_seconds": 0.334
+    },
+    {
+      "time": 2.667,
+      "time_seconds": 2.667,
+      "track_id": "T001",
+      "bbox": [
+        0.65652,
+        0.25056,
+        0.18435,
+        0.74944
+      ],
+      "confidence": 0.91661,
+      "zone": "household",
+      "sample_seconds": 0.333
+    },
+    {
+      "time": 3,
+      "time_seconds": 3,
+      "track_id": "T001",
+      "bbox": [
+        0.6128,
+        0.32348,
+        0.20646,
+        0.67652
+      ],
+      "confidence": 0.99166,
+      "zone": "household",
+      "sample_seconds": 0.333
+    }
+  ],
+  "floor": {
+    "calibration": {
+      "name": "Intel 공개 매장 · 수동 원근 보정 예시",
+      "imagePoints": [
+        [
+          0.28,
+          0.24
+        ],
+        [
+          0.61,
+          0.24
+        ],
+        [
+          0.9,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "floorPoints": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "approximate": true,
+      "note": "빈 매장 프레임의 바닥 외곽을 수동 추정했습니다. 매대 크기·통로 폭은 실측값이 아니며 자동 3D 복원이 아닙니다."
+    },
+    "mappedObservations": 296,
+    "mappedPersonSeconds": 98.66499999999995,
+    "excludedPersonSeconds": 25.330999999999957,
+    "note": "Manual perspective example and reconstructed layout, not surveyed measurements."
+  },
+  "accumulation": [
+    {
+      "end": 13,
+      "sampledFrames": 39,
+      "detections": 58,
+      "mappedObservations": 36,
+      "mappedPersonSeconds": 11.998000000000001,
+      "excludedPersonSeconds": 7.3340000000000005,
+      "width": 128,
+      "height": 160,
+      "max": 0.02974490068566904
+    },
+    {
+      "end": 26,
+      "sampledFrames": 78,
+      "detections": 166,
+      "mappedObservations": 113,
+      "mappedPersonSeconds": 37.66499999999995,
+      "excludedPersonSeconds": 17.665999999999965,
+      "width": 128,
+      "height": 160,
+      "max": 0.04362345228327519
+    },
+    {
+      "end": 52,
+      "sampledFrames": 156,
+      "detections": 372,
+      "mappedObservations": 296,
+      "mappedPersonSeconds": 98.66499999999995,
+      "excludedPersonSeconds": 25.330999999999957,
+      "width": 128,
+      "height": 160,
+      "max": 0.08425134582194434
+    }
+  ]
+}
