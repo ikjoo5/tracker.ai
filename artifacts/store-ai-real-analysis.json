@@ -3,7 +3,7 @@
   "status": "completed",
   "progress": 100,
   "source": {
-    "name": "공개 생활용품 매장 · Intel 샘플",
+    "name": "Public housewares store · Intel sample",
     "kind": "public-retail",
     "duration": 52.0,
     "width": 720,
@@ -32,7 +32,7 @@
   "zones": [
     {
       "id": "produce",
-      "label": "좌측 매대 앞",
+      "label": "Left display",
       "x": 0.02,
       "y": 0.3,
       "w": 0.22,
@@ -41,7 +41,7 @@
     },
     {
       "id": "aisle",
-      "label": "통로 안쪽",
+      "label": "Rear aisle",
       "x": 0.24,
       "y": 0.02,
       "w": 0.33,
@@ -50,7 +50,7 @@
     },
     {
       "id": "checkout",
-      "label": "하단 중앙 구역",
+      "label": "Front center",
       "x": 0.24,
       "y": 0.8,
       "w": 0.38,
@@ -59,7 +59,7 @@
     },
     {
       "id": "household",
-      "label": "우측 매대 앞",
+      "label": "Right display",
       "x": 0.57,
       "y": 0.3,
       "w": 0.3,
@@ -7622,217 +7622,217 @@
     {
       "time": 1.33,
       "type": "enter",
-      "label": "사람 트랙 관찰 시작",
+      "label": "Person track first observed",
       "track_id": "T001",
       "zone": "household"
     },
     {
       "time": 4.0,
       "type": "enter",
-      "label": "사람 트랙 관찰 시작",
+      "label": "Person track first observed",
       "track_id": "T002",
       "zone": "household"
     },
     {
       "time": 8.67,
       "type": "enter",
-      "label": "사람 트랙 관찰 시작",
+      "label": "Person track first observed",
       "track_id": "T003",
       "zone": "household"
     },
     {
       "time": 12.33,
       "type": "enter",
-      "label": "사람 트랙 관찰 시작",
+      "label": "Person track first observed",
       "track_id": "T004",
       "zone": "household"
     },
     {
       "time": 13.0,
       "type": "zone_change",
-      "label": "우측 매대 앞 → 기타 구역",
+      "label": "Right display → Other area",
       "track_id": "T004",
       "zone": "other"
     },
     {
       "time": 13.0,
       "type": "enter",
-      "label": "사람 트랙 관찰 시작",
+      "label": "Person track first observed",
       "track_id": "T005",
       "zone": "household"
     },
     {
       "time": 18.0,
       "type": "zone_change",
-      "label": "우측 매대 앞 → 기타 구역",
+      "label": "Right display → Other area",
       "track_id": "T003",
       "zone": "other"
     },
     {
       "time": 18.67,
       "type": "enter",
-      "label": "사람 트랙 관찰 시작",
+      "label": "Person track first observed",
       "track_id": "T006",
       "zone": "produce"
     },
     {
       "time": 20.0,
       "type": "enter",
-      "label": "사람 트랙 관찰 시작",
+      "label": "Person track first observed",
       "track_id": "T007",
       "zone": "household"
     },
     {
       "time": 21.0,
       "type": "enter",
-      "label": "사람 트랙 관찰 시작",
+      "label": "Person track first observed",
       "track_id": "T008",
       "zone": "produce"
     },
     {
       "time": 22.0,
       "type": "enter",
-      "label": "사람 트랙 관찰 시작",
+      "label": "Person track first observed",
       "track_id": "T009",
       "zone": "aisle"
     },
     {
       "time": 23.0,
       "type": "enter",
-      "label": "사람 트랙 관찰 시작",
+      "label": "Person track first observed",
       "track_id": "T010",
       "zone": "produce"
     },
     {
       "time": 24.67,
       "type": "enter",
-      "label": "사람 트랙 관찰 시작",
+      "label": "Person track first observed",
       "track_id": "T011",
       "zone": "aisle"
     },
     {
       "time": 25.0,
       "type": "zone_change",
-      "label": "기타 구역 → 우측 매대 앞",
+      "label": "Other area → Right display",
       "track_id": "T003",
       "zone": "household"
     },
     {
       "time": 25.33,
       "type": "zone_change",
-      "label": "우측 매대 앞 → 기타 구역",
+      "label": "Right display → Other area",
       "track_id": "T003",
       "zone": "other"
     },
     {
       "time": 26.33,
       "type": "zone_change",
-      "label": "기타 구역 → 우측 매대 앞",
+      "label": "Other area → Right display",
       "track_id": "T003",
       "zone": "household"
     },
     {
       "time": 28.67,
       "type": "enter",
-      "label": "사람 트랙 관찰 시작",
+      "label": "Person track first observed",
       "track_id": "T012",
       "zone": "produce"
     },
     {
       "time": 31.67,
       "type": "enter",
-      "label": "사람 트랙 관찰 시작",
+      "label": "Person track first observed",
       "track_id": "T013",
       "zone": "produce"
     },
     {
       "time": 32.67,
       "type": "zone_change",
-      "label": "우측 매대 앞 → 기타 구역",
+      "label": "Right display → Other area",
       "track_id": "T003",
       "zone": "other"
     },
     {
       "time": 37.0,
       "type": "enter",
-      "label": "사람 트랙 관찰 시작",
+      "label": "Person track first observed",
       "track_id": "T014",
       "zone": "produce"
     },
     {
       "time": 38.0,
       "type": "zone_change",
-      "label": "좌측 매대 앞 → 기타 구역",
+      "label": "Left display → Other area",
       "track_id": "T006",
       "zone": "other"
     },
     {
       "time": 38.33,
       "type": "zone_change",
-      "label": "기타 구역 → 우측 매대 앞",
+      "label": "Other area → Right display",
       "track_id": "T003",
       "zone": "household"
     },
     {
       "time": 41.67,
       "type": "zone_change",
-      "label": "기타 구역 → 좌측 매대 앞",
+      "label": "Other area → Left display",
       "track_id": "T006",
       "zone": "produce"
     },
     {
       "time": 42.33,
       "type": "zone_change",
-      "label": "좌측 매대 앞 → 기타 구역",
+      "label": "Left display → Other area",
       "track_id": "T006",
       "zone": "other"
     },
     {
       "time": 42.67,
       "type": "zone_change",
-      "label": "기타 구역 → 좌측 매대 앞",
+      "label": "Other area → Left display",
       "track_id": "T006",
       "zone": "produce"
     },
     {
       "time": 43.0,
       "type": "enter",
-      "label": "사람 트랙 관찰 시작",
+      "label": "Person track first observed",
       "track_id": "T015",
       "zone": "aisle"
     },
     {
       "time": 43.33,
       "type": "zone_change",
-      "label": "좌측 매대 앞 → 기타 구역",
+      "label": "Left display → Other area",
       "track_id": "T006",
       "zone": "other"
     },
     {
       "time": 45.0,
       "type": "enter",
-      "label": "사람 트랙 관찰 시작",
+      "label": "Person track first observed",
       "track_id": "T016",
       "zone": "produce"
     },
     {
       "time": 49.0,
       "type": "enter",
-      "label": "사람 트랙 관찰 시작",
+      "label": "Person track first observed",
       "track_id": "T017",
       "zone": "household"
     },
     {
       "time": 49.33,
       "type": "enter",
-      "label": "사람 트랙 관찰 시작",
+      "label": "Person track first observed",
       "track_id": "T018",
       "zone": "other"
     },
     {
       "time": 49.67,
       "type": "zone_change",
-      "label": "기타 구역 → 좌측 매대 앞",
+      "label": "Other area → Left display",
       "track_id": "T018",
       "zone": "produce"
     }
@@ -7840,42 +7840,42 @@
   "zone_dwell": [
     {
       "zone": "produce",
-      "label": "좌측 매대 앞",
+      "label": "Left display",
       "person_seconds": 38.997,
       "unique_tracks": 8
     },
     {
       "zone": "aisle",
-      "label": "통로 안쪽",
+      "label": "Rear aisle",
       "person_seconds": 14.666,
       "unique_tracks": 3
     },
     {
       "zone": "checkout",
-      "label": "하단 중앙 구역",
+      "label": "Front center",
       "person_seconds": 0.0,
       "unique_tracks": 0
     },
     {
       "zone": "household",
-      "label": "우측 매대 앞",
+      "label": "Right display",
       "person_seconds": 46.665,
       "unique_tracks": 7
     },
     {
       "zone": "other",
-      "label": "기타 구역",
+      "label": "Other area",
       "person_seconds": 23.668,
       "unique_tracks": 4
     }
   ],
   "insights": [],
   "limitations": [
-    "업로드 영상은 사전 학습된 MobileNet SSD의 person 클래스를 검출합니다. 가림·천장 시점·작은 인물은 누락될 수 있습니다.",
-    "트랙 ID는 근접 중심점 연결에 따른 임시 ID입니다. 가림·교차·재등장 시 ID가 바뀔 수 있으며 동일인 식별이나 정확한 방문자 수가 아닙니다.",
-    "사람의 역할·신원·구매 여부를 추정하지 않습니다. 구역은 바운딩박스 중심점의 위치로 분류합니다.",
-    "최대 3fps 표본 프레임의 관찰 간격으로 노출시간을 계산합니다. 표본 사이의 행동은 직접 관찰하지 않습니다.",
-    "모델 신뢰도는 검출 점수이며 실제 마트에서 측정한 정확도가 아닙니다. 히트맵은 검출 위치의 누적 관찰시간입니다."
+    "Real footage uses the person class of a pretrained MobileNet-SSD model. Occlusion, overhead views, and small people can cause missed detections.",
+    "Track IDs are temporary nearest-centroid associations. Occlusion, crossings, or re-entry can split or switch IDs; they do not identify individuals or establish an exact visitor count.",
+    "The pipeline does not infer a person's role, identity, or purchases. Zones are assigned from bounding-box centers.",
+    "Observation time is weighted by the actual intervals between frames sampled at up to 3 fps. Behavior between samples is not directly observed.",
+    "Model confidence is a detection score, not measured store-level accuracy. The heatmap accumulates observation time at detected positions."
   ],
   "tracks": [
     {

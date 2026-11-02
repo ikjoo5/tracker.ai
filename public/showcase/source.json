@@ -14,11 +14,11 @@
   "attribution": "Intel IoT DevKit sample-videos contributors · CC BY 4.0 · modified excerpt",
   "license_notice": "See docs/licenses/intel-sample-videos-CC-BY-4.0.txt. No endorsement implied.",
   "public_assets": {
-    "retail-frame.jpg": "Actual source frame, clip time22s / original time30s.",
-    "retail-bbox.jpg": "Actual detector/tracker output at clip time22s / original time30s; attribution overlay added.",
+    "retail-frame.jpg": "Actual source frame, clip time 22s / original time 30s.",
+    "retail-bbox.jpg": "Actual detector/tracker output at clip time 22s / original time 30s; attribution overlay added.",
     "dwell-3d.png": "Actual projected footpoints and duration, manually reconstructed scene, not surveyed floorplan.",
     "accumulation.png": "Real observation prefixes 0–13/26/52 seconds, same maximum color scale; no invented observations.",
-    "demo-source.mp4": "52-second actual source excerpt, muted, resampled15fps, compressed for static preview.",
-    "demo-bbox.mp4": "Actual52-second detector/tracker output with source attribution."
+    "demo-source.mp4": "52-second actual source excerpt, muted, resampled to 15fps, compressed for static preview.",
+    "demo-bbox.mp4": "Actual 52-second detector/tracker output with source attribution."
   }
 }

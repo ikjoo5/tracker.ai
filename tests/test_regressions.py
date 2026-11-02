@@ -72,7 +72,7 @@ class DetectionExportRegressionTests(unittest.TestCase):
     def test_csv_preserves_detection_provenance_units_and_scores(self):
         result = {
             'id': 'a' * 32,
-            'source': {'name': '마트, 오후.mp4', 'kind': 'upload', 'detector': 'mobilenet-ssd', 'width': 640, 'height': 360},
+            'source': {'name': 'Market, café.mp4', 'kind': 'upload', 'detector': 'mobilenet-ssd', 'width': 640, 'height': 360},
             'frames': [{'time': .25, 'frame_index': 8, 'sample_seconds': .375,
                         'people': [{'id': 'T001', 'role': 'person', 'zone': 'aisle',
                                     'bbox': [.1, .2, .3, .4], 'confidence': .82}]}],
@@ -85,7 +85,7 @@ class DetectionExportRegressionTests(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         row = rows[0]
         self.assertEqual(row['analysis_id'], 'a' * 32)
-        self.assertEqual(row['source_name'], '마트, 오후.mp4')
+        self.assertEqual(row['source_name'], 'Market, café.mp4')
         self.assertEqual(row['source_kind'], 'upload')
         self.assertEqual(row['detector'], 'mobilenet-ssd')
         self.assertEqual(row['track_id'], 'T001')

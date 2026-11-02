@@ -14,10 +14,10 @@ from .detector import DETECTOR_NAME, MODEL_REVISION, PersonDetector
 SAMPLE_FPS = 3.0
 MAX_DURATION = 120.0
 DEFAULT_ZONES = [
-    {"id": "produce", "label": "신선식품", "x": .05, "y": .08, "w": .40, "h": .40, "color": "#e99b58"},
-    {"id": "aisle", "label": "중앙매대", "x": .48, "y": .10, "w": .15, "h": .40, "color": "#809be0"},
-    {"id": "checkout", "label": "계산대", "x": .48, "y": .52, "w": .15, "h": .16, "color": "#dc9ac1"},
-    {"id": "household", "label": "생활용품", "x": .66, "y": .12, "w": .30, "h": .80, "color": "#68b6a2"},
+    {"id": "produce", "label": "Produce", "x": .05, "y": .08, "w": .40, "h": .40, "color": "#e99b58"},
+    {"id": "aisle", "label": "Main aisle", "x": .48, "y": .10, "w": .15, "h": .40, "color": "#809be0"},
+    {"id": "checkout", "label": "Checkout", "x": .48, "y": .52, "w": .15, "h": .16, "color": "#dc9ac1"},
+    {"id": "household", "label": "Household", "x": .66, "y": .12, "w": .30, "h": .80, "color": "#68b6a2"},
 ]
 
 
@@ -25,18 +25,18 @@ def probe_video(path: Path) -> dict:
     cap = cv2.VideoCapture(str(path))
     try:
         if not cap.isOpened():
-            raise ValueError("영상을 열 수 없습니다. MP4, MOV, AVI, MKV 또는 WebM 파일을 확인해 주세요.")
+            raise ValueError("Cannot open this video. Check that it is a valid MP4, MOV, AVI, MKV, or WebM file.")
         fps = float(cap.get(cv2.CAP_PROP_FPS))
         count = float(cap.get(cv2.CAP_PROP_FRAME_COUNT))
         width, height = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         if not math.isfinite(fps) or fps <= 0 or not math.isfinite(count) or count <= 0 or width < 16 or height < 16:
-            raise ValueError("영상 길이 또는 해상도를 읽을 수 없습니다.")
+            raise ValueError("Cannot read the video duration or resolution.")
         duration = count / fps
         if duration > MAX_DURATION + .1:
-            raise ValueError("데모에서는 120초 이하의 영상만 수집할 수 있습니다. 영상을 잘라서 올려 주세요.")
+            raise ValueError("This demo accepts videos up to 120 seconds. Trim the clip before uploading.")
         ok, _ = cap.read()
         if not ok:
-            raise ValueError("영상의 첫 프레임을 읽지 못했습니다.")
+            raise ValueError("Cannot decode the first video frame.")
         return {"duration": round(duration, 3), "width": width, "height": height, "fps": round(fps, 3)}
     finally:
         cap.release()
@@ -90,7 +90,7 @@ def analyze_video(path: Path, *, analysis_id: str, name: str, kind: str, zones: 
     zones = zones or DEFAULT_ZONES
     config = config or {}
     if kind == "synthetic" and not config.get("markers"):
-        raise ValueError("샘플 영상의 색상 마커 설정을 찾을 수 없습니다.")
+        raise ValueError("The synthetic sample color-marker configuration is missing.")
     detector = None if kind == "synthetic" else PersonDetector()
     source = {"name": name, "kind": kind, **metadata,
               "detector": "synthetic-color-markers" if kind == "synthetic" else DETECTOR_NAME,
@@ -132,12 +132,12 @@ def analyze_video(path: Path, *, analysis_id: str, name: str, kind: str, zones: 
                 is_new = track_id not in tracks
                 if is_new:
                     tracks[track_id] = Track(track_id, center, time, time)
-                    events.append({"time": round(time, 2), "type": "enter", "label": "사람 트랙 관찰 시작", "track_id": track_id, "zone": zone})
+                    events.append({"time": round(time, 2), "type": "enter", "label": "Person track first observed", "track_id": track_id, "zone": zone})
                 track = tracks[track_id]
                 elapsed = time - track.last_seen
                 moving = not is_new and elapsed > 0 and math.dist(center, track.center) / elapsed > .014
                 if zone != track.zone and not is_new:
-                    events.append({"time": round(time, 2), "type": "zone_change", "label": f"{labels.get(track.zone, '기타 구역')} → {labels.get(zone, '기타 구역')}", "track_id": track_id, "zone": zone})
+                    events.append({"time": round(time, 2), "type": "zone_change", "label": f"{labels.get(track.zone, 'Other area')} → {labels.get(zone, 'Other area')}", "track_id": track_id, "zone": zone})
                 track.zone, track.center, track.last_seen = zone, center, time
                 track.seen += 1
                 track.positions.append([round(time, 2), round(center[0], 4), round(center[1], 4)])
@@ -150,7 +150,7 @@ def analyze_video(path: Path, *, analysis_id: str, name: str, kind: str, zones: 
     finally:
         cap.release()
     if not frames:
-        raise ValueError("수집 가능한 영상 프레임이 없습니다.")
+        raise ValueError("The video contains no decodable observation frames.")
     # The real source frame clock may have unequal intervals (e.g. 7fps input).
     # Each detection contributes only its measured sample exposure, capped at end.
     for index, frame in enumerate(frames):
@@ -166,7 +166,7 @@ def analyze_video(path: Path, *, analysis_id: str, name: str, kind: str, zones: 
                "total_person_seconds": round(sum(track.observed for track in tracks.values()), 3),
                "observed_seconds": round(metadata["duration"], 3),
                "detections": sum(len(frame["people"]) for frame in frames)}
-    zone_dwell = [{"zone": zone, "label": labels.get(zone, "기타 구역"),
+    zone_dwell = [{"zone": zone, "label": labels.get(zone, "Other area"),
                    "person_seconds": round(sum(track.zone_seconds.get(zone, 0.) for track in tracks.values()), 3),
                    "unique_tracks": sum(zone in track.zone_seconds for track in tracks.values())} for zone in [*labels, "other"]]
     series = []
@@ -176,11 +176,11 @@ def analyze_video(path: Path, *, analysis_id: str, name: str, kind: str, zones: 
         series.append({"time": float(start), "label": f"{int(start) // 60:02}:{int(start) % 60:02}",
                        "people": round(sum(frame["counts"]["people"] * weight for frame, weight in overlaps) / (end-start), 2)})
     limitations = [
-        "합성 샘플은 영상 속 색상 마커를 검출합니다. 실제 마트에서의 인식 정확도를 검증한 결과가 아닙니다." if kind == "synthetic" else "업로드 영상은 사전 학습된 MobileNet SSD의 person 클래스를 검출합니다. 가림·천장 시점·작은 인물은 누락될 수 있습니다.",
-        "트랙 ID는 근접 중심점 연결에 따른 임시 ID입니다. 가림·교차·재등장 시 ID가 바뀔 수 있으며 동일인 식별이나 정확한 방문자 수가 아닙니다.",
-        "사람의 역할·신원·구매 여부를 추정하지 않습니다. 구역은 바운딩박스 중심점의 위치로 분류합니다.",
-        "최대 3fps 표본 프레임의 관찰 간격으로 노출시간을 계산합니다. 표본 사이의 행동은 직접 관찰하지 않습니다.",
-        "모델 신뢰도는 검출 점수이며 실제 마트에서 측정한 정확도가 아닙니다. 히트맵은 검출 위치의 누적 관찰시간입니다.",
+        "The synthetic sample detects colored markers in decoded frames. It does not validate detection accuracy in a real store." if kind == "synthetic" else "Real footage uses the person class of a pretrained MobileNet-SSD model. Occlusion, overhead views, and small people can cause missed detections.",
+        "Track IDs are temporary nearest-centroid associations. Occlusion, crossings, or re-entry can split or switch IDs; they do not identify individuals or establish an exact visitor count.",
+        "The pipeline does not infer a person's role, identity, or purchases. Zones are assigned from bounding-box centers.",
+        "Observation time is weighted by the actual intervals between frames sampled at up to 3 fps. Behavior between samples is not directly observed.",
+        "Model confidence is a detection score, not measured store-level accuracy. The heatmap accumulates observation time at detected positions.",
     ]
     return {"id": analysis_id, "status": "completed", "progress": 100, "source": source,
             "video_url": video_url or f"/media/{path.name}", "zones": zones, "frames": frames,

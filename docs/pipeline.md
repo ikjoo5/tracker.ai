@@ -1,125 +1,125 @@
-# 영상에서 공간 데이터까지
+# From video to spatial observations
 
-이 프로젝트는 실제 영상에서 **관찰값을 수집하는 흐름**을 구현합니다. 사람이 무엇을 구매했는지, 얼마나 효율적으로 일했는지, 매장의 적정 인력이 몇 명인지를 판정하는 모델은 포함하지 않습니다.
+tracker.ai implements a traceable **observation collection pipeline** for real footage. It does not infer purchases, employee productivity, or required staffing levels.
 
 ```mermaid
 flowchart LR
-    A[실제 매장 영상] --> B[디코딩·영상 시각]
-    B --> C[표본 추출 약 3 fps]
-    C --> D[MobileNet-SSD 사람 BBox]
-    D --> E[근접 중심점 임시 추적]
-    E --> F[프레임별 관찰 CSV·JSON]
-    E --> G[BBox·동선 MP4]
-    F --> H[추정 발 위치]
-    H --> I[수동 바닥 원근 보정]
-    I --> J[시간 가중 밀도 격자]
-    J --> K[Three.js 3D 그래픽·PNG]
+    A[Real store footage] --> B[Decode and establish video time]
+    B --> C[Sample at approximately 3 fps]
+    C --> D[MobileNet-SSD person BBoxes]
+    D --> E[Nearest-center temporary tracking]
+    E --> F[Frame-level CSV and JSON]
+    E --> G[BBox and trail MP4]
+    F --> H[Estimate image footpoints]
+    H --> I[Manual floor homography]
+    I --> J[Time-weighted density grid]
+    J --> K[Three.js 3D graphic and PNG]
 ```
 
-## 1. 실제 매장 영상 준비
+## 1. Prepare actual store footage
 
-[`prepare_retail_demo.py`](../scripts/prepare_retail_demo.py)는 Intel IoT DevKit의 `store-aisle-detection.mp4`를 고정 리비전에서 가져와 SHA-256을 확인합니다. 원본 00:08–01:00 구간을 52초·15fps H.264 영상으로 변환하고 음성을 제거합니다.
+[`prepare_retail_demo.py`](../scripts/prepare_retail_demo.py) downloads Intel IoT DevKit’s `store-aisle-detection.mp4` at a pinned revision and verifies its SHA-256. It converts original time 00:08–01:00 to a silent, 52-second, 15 fps H.264 excerpt.
 
-원본은 식품 마트가 아닌 **생활용품 매장**입니다. 출처·CC BY 4.0·변경 내역은 [`demo-retail.json`](../server/data/demo-retail.json)에 기록합니다. 기본 실제 영상이 없으면 API는 준비 오류를 반환하며 합성 영상으로 바꾸지 않습니다.
+This is a **housewares store**, not a grocery aisle. [`demo-retail.json`](../server/data/demo-retail.json) records the source, CC BY 4.0 terms, and modifications. If the actual default footage is missing, the API returns a preparation error rather than silently switching to synthetic footage.
 
 ```bash
 .venv/bin/python scripts/prepare_retail_demo.py
 ```
 
-## 2. 영상 시각과 탐지
+## 2. Sample video time and detect people
 
-[`analysis.py`](../server/analysis.py)는 원본 프레임 번호와 fps로 영상 시각을 계산하고 약 3fps로 표본을 선택합니다. `sample_seconds`는 다음 실제 표본 시각과의 간격이며 마지막 표본은 영상 끝까지로 제한합니다. 저fps 또는 3으로 나누어떨어지지 않는 입력도 고정 1/3초로 덮어쓰지 않습니다.
+[`analysis.py`](../server/analysis.py) computes video time from the original frame index and frame rate, then selects approximately three observations per second. `sample_seconds` is the interval until the next actual sample, with the final interval capped at the end of the clip. Low-frame-rate inputs and frame rates not divisible by three retain their actual intervals.
 
-[`detector.py`](../server/detector.py)는 OpenCV DNN의 CPU 경로로 사전학습 MobileNet-SSD를 실행합니다.
+[`detector.py`](../server/detector.py) runs pretrained MobileNet-SSD through OpenCV DNN on the CPU.
 
-- 입력: 300×300 blob, 지정된 평균값과 스케일로 전처리
-- 클래스: VOC person, class ID 15
-- 최소 모델 점수: 0.40
-- 중복 억제: NMS 임계값 0.40
-- 출력: 원본 영상 기준 정규화 BBox와 모델 점수
+- Input: a 300×300 blob with the model’s prescribed scaling and mean.
+- Class: VOC person, class ID 15.
+- Minimum model score: 0.40.
+- Non-maximum suppression threshold: 0.40.
+- Output: normalized BBoxes and model scores relative to the source dimensions.
 
-모델 리비전은 `bb17b6c3eef36d80be441ae8e5339be66e8e3b7a`입니다. [`setup_model.py`](../scripts/setup_model.py)가 선언된 SHA-256과 TLS 검증을 유지하며 파일을 준비합니다. 모델 파일은 Git에 포함하지 않고 설치 시 재현합니다. 모델 점수는 보정된 정확도나 확률 보증이 아닙니다.
+The model revision is `bb17b6c3eef36d80be441ae8e5339be66e8e3b7a`. [`setup_model.py`](../scripts/setup_model.py) preserves TLS verification and checks the declared SHA-256 values. Model files are reproduced during installation rather than committed to Git. A model score is not a calibrated accuracy guarantee.
 
-## 3. 익명 트랙과 구역
+## 3. Assign temporary tracks and zones
 
-인접한 표본의 BBox 중심을 연결해 `T001` 같은 임시 ID를 부여합니다. 최근 2초 안에 관찰됐고 중심 거리가 정규화 좌표 0.14 미만인 후보를 연결하는 초기 기준 방식입니다.
+The baseline tracker connects BBox centers across adjacent observations and assigns temporary IDs such as `T001`. It considers tracks seen within the previous two seconds and links a candidate when the distance is below 0.14 in normalized image coordinates.
 
-이 ID는 사람의 신원이 아닙니다. 가림·교차·재등장 때문에 하나의 사람이 여러 ID로 분리될 수 있습니다. 기본 결과의 18개 ID를 18명의 방문자로 해석하면 안 됩니다.
+An ID is not an identity. Occlusion, crossings, and re-entry can split one person into multiple IDs. The default result’s 18 IDs must not be interpreted as 18 visitors.
 
-구역은 영상 좌표의 정규화 사각형입니다. BBox 중심이 들어간 첫 번째 구역에 할당하며, 구역이 겹치면 목록 순서가 우선합니다. 기본 공개 영상의 라벨은 좌측 매대 앞·통로 안쪽·하단 중앙 구역·우측 매대 앞입니다. 구역별 `person_seconds`는 해당 구역에서 관찰한 인원×관찰시간의 합계입니다.
+Zones are normalized rectangles in image space. A detection is assigned to the first zone containing its BBox center; list order resolves overlaps. The actual sample uses labels for the left display, rear aisle, front center, and right display. Zone `person_seconds` sums observed people multiplied by their sample durations.
 
-## 4. 관찰 데이터 저장
+## 4. Save observation records
 
-[`exports.py`](../server/exports.py)는 탐지 한 건을 CSV 한 행으로 저장합니다. JSON은 원본 메타데이터, 구역, 프레임, 트랙, 집계, 출처를 함께 보존합니다.
+[`exports.py`](../server/exports.py) writes one CSV row per detection. JSON also retains source metadata, zones, frames, tracks, aggregate observations, and attribution.
 
-| 필드 | 단위·의미 |
+| Field | Unit or meaning |
 | --- | --- |
-| `analysis_id` | 해당 분석 작업 식별자 |
-| `source_name`, `source_kind` | 원본 이름과 실제 공개·업로드·합성 구분 |
-| `source_url`, `source_license` | 공개 원본 출처와 이용 조건 |
-| `detector` | 사용한 탐지 방법 |
-| `frame_index` | 분석한 원본의 0부터 시작하는 프레임 번호 |
-| `time_seconds` | 발췌된 입력 영상 시작 기준 초 |
-| `track_id` | 영상 내부의 임시 추적 ID |
-| `role` | 실제 영상에서는 `person`; 직원·고객 자동 분류 없음 |
-| `zone` | 처음 일치한 구역의 ID 또는 `other` |
-| `bbox_x`, `bbox_y` | 왼쪽 위 모서리, 0–1 정규화 좌표 |
-| `bbox_width`, `bbox_height` | 너비·높이, 0–1 정규화 값 |
-| `bbox_*_px` | 결과의 `source.width`, `source.height` 기준 픽셀 값 |
-| `confidence` | 모델 점수, 정확도 보증 아님 |
-| `sample_seconds` | 해당 표본의 관찰시간 가중치 |
+| `analysis_id` | Identifier for the analysis job |
+| `source_name`, `source_kind` | Source name and public-footage/upload/synthetic classification |
+| `source_url`, `source_license` | Public source and reuse terms |
+| `detector` | Detection method |
+| `frame_index` | Zero-based frame index in the analyzed input |
+| `time_seconds` | Seconds since the beginning of the excerpt |
+| `track_id` | Temporary tracking ID within this video |
+| `role` | `person` for actual footage; no automatic employee/customer classification |
+| `zone` | First matching zone ID, or `other` |
+| `bbox_x`, `bbox_y` | Top-left corner, normalized to 0–1 |
+| `bbox_width`, `bbox_height` | Width and height, normalized to 0–1 |
+| `bbox_*_px` | Pixel coordinates using `source.width` and `source.height` |
+| `confidence` | Model score, not a guarantee of accuracy |
+| `sample_seconds` | Observation-time weight for this sample |
 
-기본 영상의 `time_seconds=0`은 공개 원본의 8초에 해당합니다. 시각 기준은 `source.provenance.original_start_seconds`로 함께 기록합니다.
+For the default excerpt, `time_seconds=0` corresponds to original time 00:08. The offset is retained as `source.provenance.original_start_seconds`.
 
 ```bash
 .venv/bin/python scripts/collect.py /path/to/store.mp4 --output artifacts/my-store
-# 원시 데이터만: --no-render
-# 구역 지정: --zones zones.json
+# Raw records only: --no-render
+# Custom observation zones: --zones zones.json
 ```
 
-## 5. 발 위치를 바닥으로 투영
+## 5. Project estimated feet onto the floor
 
-새 3D 체류맵은 영상 히트맵과 기준이 다릅니다. 기존 2D 영상 히트맵은 BBox 중심을 영상 좌표에 누적합니다. 3D 체류맵은 BBox 아래쪽 중심을 발 위치로 추정하고, 수동 지정한 네 바닥 모서리로 원근 변환합니다.
+The 3D map uses a different reference from the earlier video heatmap. The earlier heatmap accumulated image-space BBox centers. The 3D map estimates a footpoint at each BBox’s bottom center and applies a manual four-corner homography.
 
-[`floorProjection.ts`](../src/floorProjection.ts)의 기본 보정은 Intel 샘플 전용입니다.
+The default calibration in [`floorProjection.ts`](../src/floorProjection.ts) is specific to the Intel sample.
 
 ```text
-영상 좌표: (0.28,0.24), (0.61,0.24), (0.90,1.00), (0.00,1.00)
-바닥 좌표: (0,0),       (1,0),       (1,1),       (0,1)
+Image: (0.28,0.24), (0.61,0.24), (0.90,1.00), (0.00,1.00)
+Floor: (0,0),       (1,0),       (1,1),       (0,1)
 ```
 
-바닥의 `u,v`는 단위 없는 0–1 좌표입니다. 뒤쪽이 `v=0`, 카메라에 가까운 쪽이 `v=1`입니다. 미터나 제곱미터로 보정된 좌표가 아닙니다.
+Floor coordinates `u,v` are unitless values in the range 0–1. The far edge is `v=0`; the edge near the camera is `v=1`. These are not calibrated metres or square metres.
 
-BBox 아래쪽이 영상 경계 `y≥0.995`에서 잘리면 발 위치가 불명확하므로 제외합니다. 변환 후 바닥 밖에 있는 좌표도 제외하며, 가장자리로 강제 이동시켜 가짜 고밀도 띠를 만들지 않습니다. 다른 카메라에는 이 보정을 자동 적용하지 않습니다.
+A BBox bottom at `y≥0.995` is treated as cropped, so its footpoint is excluded. Points outside the calibrated floor are also excluded instead of being clamped to the boundary and creating artificial edge hotspots. This calibration is not automatically applied to another camera.
 
-## 6. 관찰시간을 격자로 누적
+## 6. Accumulate observation time in a grid
 
-선택 시간 구간과 각 표본의 실제 `sample_seconds`가 겹치는 시간만 반영합니다. 각 투영 지점 주위에 가우시안 가중치를 분배하며 격자 합계가 투영된 인·초 합계와 일치하도록 정규화합니다.
+Only the overlap between a sample’s actual `sample_seconds` and the selected time interval contributes. Gaussian weights distribute each projected observation spatially, with normalization that preserves the sum of mapped person-seconds.
 
-현재 3D 화면은 128×160 격자와 정규화 폭 `sigma=0.04`를 사용합니다. 색상은 선택 구간 안에서 정규화한 상대 체류량입니다. 물리적 면적당 인원 밀도나 실제 온도가 아닙니다. 시간 구간마다 색상의 기준 최대값이 달라질 수 있으므로 구간 간 비교에는 수치도 함께 확인해야 합니다.
+The current 3D view uses a 128×160 grid and normalized `sigma=0.04`. Color represents relative dwell within the selected interval, not physical person density or temperature. The interval’s maximum can change, so compare the accompanying values when comparing time ranges. The accumulation illustration uses the same full-clip color scale across its 13-, 26-, and 52-second prefixes.
 
 ```bash
 npm run export:floor
 ```
 
-결과는 [`store-ai-floor-heatmap.json`](../artifacts/store-ai-floor-heatmap.json)과 [`store-ai-floor-points.csv`](../artifacts/store-ai-floor-points.csv)에 저장됩니다. 원본 출처, 보정점, 격자, 포함·제외한 관찰량을 함께 기록합니다.
+The resulting [`store-ai-floor-heatmap.json`](../artifacts/store-ai-floor-heatmap.json) and [`store-ai-floor-points.csv`](../artifacts/store-ai-floor-points.csv) retain source attribution, calibration, grid values, and included/excluded observation amounts. The older filenames remain for compatibility with existing scripts.
 
-## 7. 3D 그래픽과 설명용 시각화
+## 7. Present 3D graphics and explanatory concepts
 
-[`FloorHeatmap.tsx`](../src/FloorHeatmap.tsx)는 Three.js로 매대와 바닥을 재구성하고 실제 격자 색상을 바닥에 표시합니다. 회전·확대, 평면 보기, 매대 표시, 시간 구간 선택과 PNG 저장을 지원합니다. WebGL을 사용할 수 없을 때는 호환 시각화를 표시합니다.
+[`FloorHeatmap.tsx`](../src/FloorHeatmap.tsx) reconstructs a schematic shelf layout with Three.js and draws the actual grid on its floor. It supports rotation, zoom, top view, shelf visibility, interval selection, and PNG export. A compatibility visualization is available when WebGL cannot be used.
 
-매대의 형상·높이·간격은 설명용입니다. 자동으로 매장을 복원하거나 실측한 것이 아닙니다. 프로젝트 소개 페이지의 복잡한 확장 매장 이미지는 별도의 **설명용 개념 시각화**로 표시하며 실제 측정 이미지와 혼합하지 않습니다.
+Shelf shapes, heights, and spacing are illustrative rather than surveyed or automatically recovered. The public page separately labels its crowded BBox scene and expanded-store heatmap as **generated explanatory concepts**, not model inference or measured results.
 
-## 재현 결과와 검증 범위
+## Reproduced results and validation scope
 
-| 항목 | 기본 실제 영상 결과 |
+| Item | Actual default clip |
 | --- | ---: |
-| 입력 | 52초, 720×404, 15fps |
-| 탐지 표본 | 156프레임, 372건 |
-| 임시 ID | 18개, 2회 이상 관찰 16개 |
-| 최대 동시 탐지 | 5명 |
-| 전체 관찰 가중치 | 123.996인·초 |
-| 3D 바닥 반영 | 296건, 98.665인·초 |
-| 제외 | 잘린 발 59건 + 영역 밖 17건 = 76건, 25.331인·초 |
+| Input | 52 seconds, 720×404, 15 fps |
+| Detection samples | 156 frames, 372 observations |
+| Temporary IDs | 18 total, 16 observed at least twice |
+| Peak simultaneous detections | 5 |
+| Total observation weight | 123.996 person-seconds |
+| Included in the 3D floor | 296 observations, 98.665 person-seconds |
+| Excluded | 59 cropped feet + 17 outside the floor = 76 observations, 25.331 person-seconds |
 
-기존 백엔드 24개와 바닥 투영 14개 사례는 시간 계산·좌표·데이터 보존·오류 처리·합계 보존 등을 검증합니다. 정답 라벨 기반 정확도·재현율, 추적 ID 유지율, 실제 체류시간 오차는 아직 평가하지 않았습니다. 상세 실행 기록은 [validation.md](validation.md)에 있습니다.
+The existing 24 backend tests and 14 floor-projection cases check timing, coordinates, record preservation, error handling, and weight conservation. Ground-truth detector precision/recall, ID continuity, and real dwell-time error have not been evaluated. See the [validation record](validation.md) for commands and boundaries.

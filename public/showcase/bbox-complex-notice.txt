@@ -1,16 +1,16 @@
-복잡한 매장 감지 상황 설명용 시각화 · 생성 이미지 · 실제 모델 추론 결과 아님
+Illustrative crowded-store scenario · Generated image · Not model inference
 
-This is an original generated retail scenario for explaining a computer-vision
-pipeline. The store, shoppers, bounding boxes, and anonymous P001–P014 labels
-are fictional visual elements. They are not output from the project's person
-detector, tracked CCTV observations, annotated ground truth, or an accuracy
-evaluation. Do not present the image as proof of detection/occlusion performance.
+This original generated retail scenario explains the tracker.ai computer-vision
+pipeline. Its store, shoppers, bounding boxes and anonymous P001–P014 labels are
+fictional visual elements. They are not detector output, tracked observations,
+annotated ground truth or an accuracy evaluation. Do not present this image as
+proof of detection or occlusion performance.
 
-Display a visible caption with this image:
-"복잡한 매장 감지 상황 설명용 · 생성 이미지 · 실제 추론 결과 아님"
+Keep a visible caption beside this image:
+"Generated crowded-store scenario · Not model inference"
 
-The image itself carries the footer:
+The image itself states:
 "ILLUSTRATIVE SCENARIO — NOT MODEL INFERENCE"
 
-The actual Intel/CC BY 4.0 video, recorded model detections, and resulting
-heatmaps remain separate project assets with their own provenance.
+The actual Intel / CC BY 4.0 video, recorded detections and resulting heatmaps
+remain separate project assets with their own provenance.

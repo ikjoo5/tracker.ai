@@ -39,7 +39,7 @@ const packaged = { ...result, video_url: 'showcase/demo-source.mp4', annotated_v
 delete packaged.heatmap_video_url;
 packaged.artifact_files = { annotated_video_url: 'demo-bbox.mp4', heatmap_png: 'dwell-3d.png' };
 fs.writeFileSync(path.join(output, 'analysis.json'), JSON.stringify(packaged, null, 2) + '\n');
-fs.copyFileSync('artifacts/store-ai-real-detections.csv', path.join(output, 'detections.csv'));
+run(path.join(root, '.venv/bin/python'), ['-c', 'import json,sys; from pathlib import Path; from server.exports import detection_csv; result=json.loads(Path(sys.argv[1]).read_text(encoding="utf-8")); Path(sys.argv[2]).write_text(detection_csv(result),encoding="utf-8")', 'artifacts/store-ai-real-analysis.json', path.join(output, 'detections.csv')]);
 fs.copyFileSync(path.join(output, 'detections.csv'), path.join(output, 'observation-data.csv'));
 fs.copyFileSync(path.join(output, 'analysis.json'), path.join(output, 'observation-data.json'));
 // The marked image is extracted at the same timestamp as the unmarked example below.
@@ -48,12 +48,12 @@ fs.copyFileSync('artifacts/store-ai-real-bbox.mp4', path.join(output, 'demo-bbox
 fs.copyFileSync('docs/licenses/intel-sample-videos-CC-BY-4.0.txt', path.join(output, 'license.txt'));
 fs.writeFileSync(path.join(output, 'source.json'), JSON.stringify({
   ...result.source.provenance, public_assets: {
-    'retail-frame.jpg': 'Actual source frame, clip time22s / original time30s.',
-    'retail-bbox.jpg': 'Actual detector/tracker output at clip time22s / original time30s; attribution overlay added.',
+    'retail-frame.jpg': 'Actual source frame, clip time 22s / original time 30s.',
+    'retail-bbox.jpg': 'Actual detector/tracker output at clip time 22s / original time 30s; attribution overlay added.',
     'dwell-3d.png': 'Actual projected footpoints and duration, manually reconstructed scene, not surveyed floorplan.',
     'accumulation.png': 'Real observation prefixes 0–13/26/52 seconds, same maximum color scale; no invented observations.',
-    'demo-source.mp4': '52-second actual source excerpt, muted, resampled15fps, compressed for static preview.',
-    'demo-bbox.mp4': 'Actual52-second detector/tracker output with source attribution.',
+    'demo-source.mp4': '52-second actual source excerpt, muted, resampled to 15fps, compressed for static preview.',
+    'demo-bbox.mp4': 'Actual 52-second detector/tracker output with source attribution.',
   },
 }, null, 2) + '\n');
 function run(program: string, args: string[]) {
@@ -63,7 +63,7 @@ function run(program: string, args: string[]) {
 run('ffmpeg', ['-nostdin', '-hide_banner', '-loglevel', 'error', '-y', '-ss', '22', '-i', clip, '-frames:v', '1', '-q:v', '2', path.join(output, 'retail-frame.jpg')]);
 run('ffmpeg', ['-nostdin', '-hide_banner', '-loglevel', 'error', '-y', '-ss', '22', '-i', 'artifacts/store-ai-real-bbox.mp4', '-frames:v', '1', '-q:v', '2', path.join(output, 'retail-bbox.jpg')]);
 run('ffmpeg', ['-nostdin', '-hide_banner', '-loglevel', 'error', '-y', '-i', clip, '-an', '-c:v', 'libx264', '-preset', 'fast', '-crf', '28', '-pix_fmt', 'yuv420p', '-threads', '2', '-movflags', '+faststart', path.join(output, 'demo-source.mp4')]);
-const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'store-showcase-'));
+const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'tracker-showcase-'));
 try {
   const dataFile = path.join(temporary, 'stages.json');
   fs.writeFileSync(dataFile, JSON.stringify({ stages, source: result.source, fullMax: full.max }));

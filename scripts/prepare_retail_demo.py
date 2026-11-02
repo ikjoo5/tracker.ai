@@ -18,10 +18,10 @@ EXPECTED_SHA256 = "3526fee39cac70d6366471e4324a6d63b337c8f8ab99c015521bee0d60ed6
 RAW_URL = f"https://raw.githubusercontent.com/intel-iot-devkit/sample-videos/{REVISION}/store-aisle-detection.mp4"
 SOURCE_URL = f"https://github.com/intel-iot-devkit/sample-videos/blob/{REVISION}/store-aisle-detection.mp4"
 ZONES = [
-    {"id": "produce", "label": "좌측 매대 앞", "x": .02, "y": .30, "w": .22, "h": .65, "color": "#e99b58"},
-    {"id": "aisle", "label": "통로 안쪽", "x": .24, "y": .02, "w": .33, "h": .28, "color": "#809be0"},
-    {"id": "checkout", "label": "하단 중앙 구역", "x": .24, "y": .80, "w": .38, "h": .20, "color": "#dc9ac1"},
-    {"id": "household", "label": "우측 매대 앞", "x": .57, "y": .30, "w": .30, "h": .50, "color": "#68b6a2"},
+    {"id": "produce", "label": "Left display", "x": .02, "y": .30, "w": .22, "h": .65, "color": "#e99b58"},
+    {"id": "aisle", "label": "Rear aisle", "x": .24, "y": .02, "w": .33, "h": .28, "color": "#809be0"},
+    {"id": "checkout", "label": "Front center", "x": .24, "y": .80, "w": .38, "h": .20, "color": "#dc9ac1"},
+    {"id": "household", "label": "Right display", "x": .57, "y": .30, "w": .30, "h": .50, "color": "#68b6a2"},
 ]
 
 
@@ -45,7 +45,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix="store-real-demo-") as temporary:
         source = args.source or Path(temporary) / "store-aisle-detection.mp4"
         if not args.source:
-            request = urllib.request.Request(RAW_URL, headers={"User-Agent": "StoreAI-DemoSetup/0.1"})
+            request = urllib.request.Request(RAW_URL, headers={"User-Agent": "TrackerAI-DemoSetup/0.1"})
             with urllib.request.urlopen(request, timeout=90) as response, source.open("wb") as stream:
                 shutil.copyfileobj(response, stream)
         if digest(source) != EXPECTED_SHA256:
@@ -69,7 +69,7 @@ def main():
             "attribution": "Intel IoT DevKit sample-videos contributors · CC BY 4.0 · modified excerpt",
             "license_notice": "See docs/licenses/intel-sample-videos-CC-BY-4.0.txt. No endorsement implied.",
         }
-        manifest = {"name": "공개 생활용품 매장 · Intel 샘플", "kind": "public-retail", "video": destination.name,
+        manifest = {"name": "Public housewares store · Intel sample", "kind": "public-retail", "video": destination.name,
                     "video_sha256": digest(output), "zones": ZONES, "provenance": provenance}
         shutil.copyfile(output, destination)
         manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

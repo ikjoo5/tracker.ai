@@ -23,10 +23,10 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 WIDTH, HEIGHT, FPS, DURATION = 1280, 720, 15, 36
 ZONES = [
-    {"id": "produce", "label": "신선식품", "x": .05, "y": .08, "w": .40, "h": .40, "color": "#e87932"},
-    {"id": "aisle", "label": "중앙매대", "x": .48, "y": .10, "w": .15, "h": .40, "color": "#699fe8"},
-    {"id": "checkout", "label": "계산대", "x": .48, "y": .52, "w": .15, "h": .16, "color": "#c18be0"},
-    {"id": "household", "label": "생활용품", "x": .66, "y": .12, "w": .30, "h": .80, "color": "#59b6a1"},
+    {"id": "produce", "label": "Produce", "x": .05, "y": .08, "w": .40, "h": .40, "color": "#e87932"},
+    {"id": "aisle", "label": "Main aisle", "x": .48, "y": .10, "w": .15, "h": .40, "color": "#699fe8"},
+    {"id": "checkout", "label": "Checkout", "x": .48, "y": .52, "w": .15, "h": .16, "color": "#c18be0"},
+    {"id": "household", "label": "Household", "x": .66, "y": .12, "w": .30, "h": .80, "color": "#59b6a1"},
 ]
 
 
@@ -169,7 +169,7 @@ def background() -> Image.Image:
     pill(d,(15,13,342,39),"#2f392e",5)
     d.ellipse((27,22,35,30),fill="#d8e4bd")
     d.text((45,16),"SYNTHETIC MART  /  DEMO CAMERA 01",font=FONT12,fill="#e8eddf")
-    d.text((1040,16),"store.ai  /  SIMULATION",font=FONT12,fill="#737f69")
+    d.text((1040,16),"tracker.ai  /  SIMULATION",font=FONT12,fill="#737f69")
     # Reserve all marker colors exclusively for anonymous shoppers.
     pixels=np.asarray(image).copy()
     for actor in ACTORS:

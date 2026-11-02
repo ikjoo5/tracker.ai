@@ -32,12 +32,12 @@ class RealRetailDemoTests(unittest.TestCase):
             writer.write(np.full((240, 320, 3), 96, np.uint8))
         writer.release()
         self.zones = copy.deepcopy(DEFAULT_ZONES)
-        self.zones[0].update(label="실제 상품 진열대 A", x=.1, w=.3)
+        self.zones[0].update(label="Actual display A", x=.1, w=.3)
         self.provenance = {"title": "Retail fixture", "creator": "Fixture publisher", "source_url": "https://example.org/store.mp4",
                            "license": "CC BY 4.0", "license_url": "https://creativecommons.org/licenses/by/4.0/",
                            "source_sha256": "a" * 64, "original_start_seconds": 8,
                            "changes": ["Trimmed and resized; no detections added"]}
-        self.manifest = {"name": "공개 실제 매장 영상", "kind": "public-retail", "video": "demo-retail.mp4",
+        self.manifest = {"name": "Public real-store video", "kind": "public-retail", "video": "demo-retail.mp4",
                          "zones": self.zones, "provenance": self.provenance}
         self.manifest_path = self.data / "demo-retail.json"
         self.manifest_path.write_text(json.dumps(self.manifest, ensure_ascii=False))

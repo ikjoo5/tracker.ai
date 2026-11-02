@@ -34,7 +34,7 @@ def main():
     else:
         config = json.loads((ROOT / "server/data/demo-mart-config.json").read_text())
         result = analyze_video(args.source, analysis_id=uuid.uuid4().hex,
-                               name="MART 01 · 합성 CCTV 샘플", kind="synthetic",
+                               name="MART 01 · Synthetic CCTV sample", kind="synthetic",
                                config=config, zones=config.get("zones"), video_url="/media/demo-mart.mp4")
     result.update(render_analysis(result, args.source, args.output_dir))
     args.artifact_dir.mkdir(parents=True, exist_ok=True)

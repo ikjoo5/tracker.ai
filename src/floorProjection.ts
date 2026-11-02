@@ -44,11 +44,11 @@ export type FloorHeatmap = {
 };
 
 export const DEFAULT_FLOOR_CALIBRATION: FloorCalibration = {
-  name: 'Intel 공개 매장 · 수동 원근 보정 예시',
+  name: 'Intel public retail clip · Manual perspective example',
   imagePoints: [[.28, .24], [.61, .24], [.90, 1], [0, 1]],
   floorPoints: [[0, 0], [1, 0], [1, 1], [0, 1]],
   approximate: true,
-  note: '빈 매장 프레임의 바닥 외곽을 수동 추정했습니다. 매대 크기·통로 폭은 실측값이 아니며 자동 3D 복원이 아닙니다.',
+  note: 'Floor corners were estimated manually from an empty-store frame. Shelf sizes and aisle widths are not surveyed measurements or an automatic 3D reconstruction.',
 };
 
 /** Solve H with h33=1. Throws for degenerate or non-finite calibration. */
@@ -56,7 +56,7 @@ export function solveHomography(calibration: FloorCalibration): number[] {
   const { imagePoints, floorPoints } = calibration;
   if (imagePoints.length !== 4 || floorPoints.length !== 4 ||
       [...imagePoints, ...floorPoints].some(p => p.length !== 2 || p.some(n => !Number.isFinite(n)))) {
-    throw new Error('보정에는 유한한 좌표 네 쌍이 필요합니다.');
+    throw new Error('Calibration requires four pairs of finite coordinates.');
   }
   const a: number[][] = [];
   for (let i = 0; i < 4; i++) {
@@ -67,7 +67,7 @@ export function solveHomography(calibration: FloorCalibration): number[] {
   for (let col = 0; col < 8; col++) {
     let pivot = col;
     for (let row = col+1; row < 8; row++) if (Math.abs(a[row][col]) > Math.abs(a[pivot][col])) pivot = row;
-    if (Math.abs(a[pivot][col]) < 1e-10) throw new Error('보정점이 일직선이거나 겹쳐 원근 변환을 계산할 수 없습니다.');
+    if (Math.abs(a[pivot][col]) < 1e-10) throw new Error('Calibration points are collinear or overlapping; a homography cannot be solved.');
     [a[col], a[pivot]] = [a[pivot], a[col]];
     const divisor = a[col][col];
     for (let j = col; j < 9; j++) a[col][j] /= divisor;
@@ -115,10 +115,10 @@ export function buildFloorHeatmap(frames: FloorFrame[], options: FloorHeatmapOpt
   const { calibration } = options;
   const width = options.width ?? 96, height = options.height ?? 128, sigma = options.sigma ?? .035;
   if (!Number.isInteger(width) || !Number.isInteger(height) || width < 2 || height < 2 || width > 512 || height > 512 || !Number.isFinite(sigma) || sigma <= 0 || sigma > 1) {
-    throw new Error('히트맵 격자와 평활화 크기가 올바르지 않습니다.');
+    throw new Error('Invalid heatmap grid or smoothing size.');
   }
   const start = options.startTime ?? 0, end = options.endTime ?? Number.POSITIVE_INFINITY;
-  if (!Number.isFinite(start) || Number.isNaN(end) || end < start) throw new Error('관찰 시간 구간이 올바르지 않습니다.');
+  if (!Number.isFinite(start) || Number.isNaN(end) || end < start) throw new Error('Invalid observation time range.');
   const h = solveHomography(calibration), grid = new Array<number>(width*height).fill(0);
   const result: FloorHeatmap = { grid, width, height, max: 0, observedPersonSeconds: 0, mappedPersonSeconds: 0,
     excludedPersonSeconds: 0, acceptedObservations: 0, totalObservations: 0, clippedFootObservations: 0,

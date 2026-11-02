@@ -1,4 +1,4 @@
-"""Local Store AI collection API. Run: uvicorn server.app:app --port 8000."""
+"""Local tracker.ai collection API. Run: uvicorn server.app:app --port 8000."""
 from __future__ import annotations
 
 import csv
@@ -32,7 +32,7 @@ jobs: dict[str, dict] = {}
 lock = threading.Lock()
 executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="video-analysis")
 
-app = FastAPI(title="Store AI", version="0.1.0", description="Local frame-based mart person observations")
+app = FastAPI(title="tracker.ai", version="0.1.0", description="Local frame-based mart person observations")
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"], allow_methods=["GET", "POST", "DELETE"], allow_headers=["*"])
 
 
@@ -56,7 +56,7 @@ def validate_zones(raw: str | None) -> list[dict]:
             z["color"] = str(z.get("color", "#809be0"))[:30]
         return zones
     except (TypeError, ValueError, KeyError):
-        raise HTTPException(422, "구역은 produce, aisle, checkout, household 네 개의 정규화된 사각형이어야 합니다.")
+        raise HTTPException(422, "Provide four normalized rectangular zones with the IDs produce, aisle, checkout, and household.")
 
 
 def update_job(job_id: str, **values):
@@ -80,9 +80,9 @@ def worker(job_id: str, path: Path, name: str, kind: str, zones: list[dict], pro
                                    "-crf", "23", "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(video_path)],
                                   capture_output=True, timeout=180)
             if proc.returncode:
-                raise ValueError("영상을 재생 가능한 MP4로 변환하지 못했습니다. 다른 코덱으로 저장해 주세요.")
+                raise ValueError("Cannot convert this video to a playable MP4. Try exporting it with another codec.")
         elif kind != "public-retail":
-            raise ValueError("지원하지 않는 영상 수집 유형입니다.")
+            raise ValueError("Unsupported video source type.")
         update_job(job_id, stage="detecting")
         result = analyze_video(path, analysis_id=job_id, name=name, kind=kind, zones=zones, config=config,
                                progress=lambda p: update_job(job_id, progress=round(p * .8, 1)), video_url=video_url)
@@ -98,7 +98,7 @@ def worker(job_id: str, path: Path, name: str, kind: str, zones: list[dict], pro
             jobs[job_id] = result
     except Exception as exc:
         # Only expected operational messages reach the UI, not local file paths or tracebacks.
-        message = str(exc) if isinstance(exc, ValueError) else "영상 분석 중 오류가 발생했습니다. 파일 형식과 샘플 설치 상태를 확인해 주세요."
+        message = str(exc) if isinstance(exc, ValueError) else "Video analysis failed. Check the file format and the sample installation."
         update_job(job_id, status="failed", error=message, progress=0)
 
 
@@ -106,7 +106,7 @@ def queue_job(path: Path, name: str, kind: str, zones: list[dict], provenance: d
     with lock:
         active = sum(j.get("status") in {"queued", "processing"} for j in jobs.values())
         if active >= 5:
-            raise HTTPException(429, "분석 대기열이 가득 찼습니다. 현재 분석이 끝난 후 다시 시도해 주세요.")
+            raise HTTPException(429, "The analysis queue is full. Try again after the current jobs finish.")
         job_id = uuid.uuid4().hex
         jobs[job_id] = {"id": job_id, "status": "queued", "progress": 0, "source": {"name": name, "kind": kind}}
         if provenance is not None:
@@ -123,7 +123,7 @@ def health():
 
 def retail_demo_spec() -> tuple[Path, dict, list[dict], dict]:
     """Real footage is the default; a missing manifest must never select artwork."""
-    guidance = "공개 실제 매장 데모가 준비되지 않았습니다. python scripts/prepare_retail_demo.py 명령을 실행해 주세요."
+    guidance = "The public real-store demo is not ready. Run python scripts/prepare_retail_demo.py."
     try:
         manifest = json.loads((DATA / "demo-retail.json").read_text(encoding="utf-8"))
         if not isinstance(manifest, dict) or manifest.get("kind") != "public-retail" or manifest.get("video") != "demo-retail.mp4":
@@ -160,8 +160,8 @@ def synthetic_demo():
     """An explicitly selected synthetic test fixture, never a real-footage fallback."""
     path = DATA / "demo-mart.mp4"
     if not path.exists() or not (DATA / "demo-mart-config.json").exists():
-        raise HTTPException(503, "샘플이 아직 준비되지 않았습니다. python scripts/generate_sample.py 명령을 실행해 주세요.")
-    return queue_job(path, "MART 01 · 합성 CCTV 샘플", "synthetic", DEFAULT_ZONES)
+        raise HTTPException(503, "The synthetic sample is not ready. Run python scripts/generate_sample.py.")
+    return queue_job(path, "MART 01 · Synthetic CCTV sample", "synthetic", DEFAULT_ZONES)
 
 
 @app.post("/api/analyses", status_code=202)
@@ -170,7 +170,7 @@ async def upload(file: UploadFile = File(...), zones: str | None = Form(None)):
     name = Path((file.filename or "video.mp4").replace("\\", "/")).name
     extension = Path(name).suffix.lower()
     if extension not in EXTENSIONS:
-        raise HTTPException(415, "지원하는 영상 형식: MP4, MOV, AVI, MKV, WebM, M4V")
+        raise HTTPException(415, "Supported video formats: MP4, MOV, AVI, MKV, WebM, M4V")
     path = DATA / "uploads" / f"{uuid.uuid4().hex}{extension}"
     size = 0
     try:
@@ -178,10 +178,10 @@ async def upload(file: UploadFile = File(...), zones: str | None = Form(None)):
             while chunk := await file.read(1024 * 1024):
                 size += len(chunk)
                 if size > MAX_UPLOAD:
-                    raise HTTPException(413, "100MB 이하의 영상만 업로드할 수 있습니다.")
+                    raise HTTPException(413, "Upload a video of 100 MB or less.")
                 output.write(chunk)
         if size == 0:
-            raise HTTPException(422, "비어 있는 파일입니다.")
+            raise HTTPException(422, "The uploaded file is empty.")
         try:
             probe_video(path)
         except ValueError as exc:
@@ -196,7 +196,7 @@ async def upload(file: UploadFile = File(...), zones: str | None = Form(None)):
 
 def get_result(job_id: str) -> dict:
     if not job_id.isalnum() or len(job_id) != 32:
-        raise HTTPException(404, "분석 결과를 찾을 수 없습니다.")
+        raise HTTPException(404, "Analysis result not found.")
     with lock:
         current = jobs.get(job_id)
     if current is not None:
@@ -204,7 +204,7 @@ def get_result(job_id: str) -> dict:
     result_path = DATA / "results" / f"{job_id}.json"
     if result_path.exists():
         return json.loads(result_path.read_text(encoding="utf-8"))
-    raise HTTPException(404, "분석 결과를 찾을 수 없습니다.")
+    raise HTTPException(404, "Analysis result not found.")
 
 
 @app.get("/api/analyses/{job_id}")
@@ -216,7 +216,7 @@ def get_analysis(job_id: str):
 def export_analysis(job_id: str, format: str = Query("json", pattern="^(json|csv|summary_csv)$")):
     result = get_result(job_id)
     if result["status"] != "completed":
-        raise HTTPException(409, "분석이 완료된 후 다운로드할 수 있습니다.")
+        raise HTTPException(409, "Wait for the analysis to finish before downloading.")
     if format == "json":
         content = json.dumps(result, ensure_ascii=False, indent=2)
         media_type = "application/json"
@@ -231,7 +231,7 @@ def export_analysis(job_id: str, format: str = Query("json", pattern="^(json|csv
         content = "\ufeff" + stream.getvalue()
         media_type = "text/csv"
     suffix = "json" if format == "json" else "csv"
-    return Response(content=content, media_type=media_type, headers={"Content-Disposition": f'attachment; filename="store-analysis-{job_id}.{suffix}"'})
+    return Response(content=content, media_type=media_type, headers={"Content-Disposition": f'attachment; filename="tracker-analysis-{job_id}.{suffix}"'})
 
 
 @app.get("/media/{filename}")
@@ -241,9 +241,9 @@ def media(filename: str):
     elif re.fullmatch(r"[a-f0-9]{32}(?:-bbox|-heatmap)?\.mp4", filename):
         path = DATA / "media" / filename
     else:
-        raise HTTPException(404, "영상을 찾을 수 없습니다.")
+        raise HTTPException(404, "Video not found.")
     if not path.is_file():
-        raise HTTPException(404, "영상을 찾을 수 없습니다.")
+        raise HTTPException(404, "Video not found.")
     return FileResponse(path, media_type="video/mp4", headers={"Cache-Control": "private, max-age=3600"})
 
 

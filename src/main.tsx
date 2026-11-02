@@ -21,7 +21,7 @@ function Site() {
       requestAnimationFrame(() => document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView());
     } else if (workspace || !hash) window.scrollTo(0, 0);
   }, [workspace, hash]);
-  return workspace ? <Suspense fallback={<div style={{ padding: '80px 30px', fontFamily: 'sans-serif', textAlign: 'center', color: '#526744' }}>매장 관찰 워크스페이스를 준비하고 있습니다…</div>}><Workspace /></Suspense> : <Landing />;
+  return workspace ? <Suspense fallback={<div style={{ padding: '80px 30px', fontFamily: 'sans-serif', textAlign: 'center', color: '#526744' }}>Preparing the observation workspace…</div>}><Workspace /></Suspense> : <Landing />;
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><Site /></React.StrictMode>);

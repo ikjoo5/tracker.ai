@@ -2,7 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 if [ ! -x .venv/bin/python ] || [ ! -d node_modules ]; then
-  echo '먼저 bash scripts/setup.sh 를 실행하세요.' >&2
+  echo 'Run bash scripts/setup.sh first.' >&2
   exit 1
 fi
 .venv/bin/python -m uvicorn server.app:app --host 0.0.0.0 --port 8000 &

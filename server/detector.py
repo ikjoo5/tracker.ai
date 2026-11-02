@@ -23,7 +23,7 @@ class PersonDetector:
     """VOC person class 15, threshold .40; model confidence is not accuracy."""
     def __init__(self, model_dir: Path = MODEL_DIR, threshold: float = .4):
         if not verified_model_files(model_dir):
-            raise ValueError("사전 학습 모델이 없거나 무결성 확인에 실패했습니다. python scripts/setup_model.py를 실행해 주세요.")
+            raise ValueError("The pretrained model is missing or failed integrity verification. Run python scripts/setup_model.py.")
         self.threshold = threshold
         self.net = cv2.dnn.readNetFromCaffe(str(model_dir / "deploy.prototxt"), str(model_dir / "mobilenet_iter_73000.caffemodel"))
         self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)

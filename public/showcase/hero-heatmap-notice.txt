@@ -1,17 +1,16 @@
-설명용 확장 매장 시각화 · 생성 이미지 · 실제 관측/측정/복원 결과 아님
+Illustrative expanded-store concept · Generated image · Not measured or reconstructed data
 
-This image is an original, generated architectural concept for the store.ai
-project introduction. The fictional store layout, people, and colorful floor
-heatmap illustrate a possible retail-analytics presentation. They are not
-derived from the project's recorded CCTV observations, calibrated floor plan,
-visitor counts, measured dwell times, or an automatic 3D reconstruction.
+This original generated architectural concept illustrates the tracker.ai
+pipeline. Its fictional floor plan, people and colored heatmap are not derived
+from recorded CCTV observations, calibrated geometry, visitor counts, measured
+dwell times or automatic 3D reconstruction.
 
-Display a visible caption with the image:
-"확장 매장 설명용 시각화 · 실제 측정 결과 아님"
+Keep a visible caption beside this image:
+"Illustrative concept · Not measured data"
 
-The image itself carries the caption:
+The image itself states:
 "ILLUSTRATIVE CONCEPT — NOT MEASURED DATA"
 
-Created for this project with an image-generation tool. No external reference
-photograph or third-party store illustration was copied. The actual measured
-examples and their Intel/CC BY 4.0 attribution are separate assets.
+Created for this project using an image-generation tool. No external reference
+photograph or third-party store illustration was copied. Actual measured
+examples and their Intel / CC BY 4.0 attribution are separate assets.

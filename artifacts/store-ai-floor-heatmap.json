@@ -1,7 +1,7 @@
 {
   "analysis_id": "b890a42d1c174197afa2e70d597ac811",
   "source": {
-    "name": "공개 생활용품 매장 · Intel 샘플",
+    "name": "Public housewares store · Intel sample",
     "kind": "public-retail",
     "duration": 52,
     "width": 720,
@@ -22601,7 +22601,7 @@
     }
   ],
   "calibration": {
-    "name": "Intel 공개 매장 · 수동 원근 보정 예시",
+    "name": "Intel public store · Manual perspective calibration example",
     "imagePoints": [
       [
         0.28,
@@ -22639,6 +22639,6 @@
       ]
     ],
     "approximate": true,
-    "note": "빈 매장 프레임의 바닥 외곽을 수동 추정했습니다. 매대 크기·통로 폭은 실측값이 아니며 자동 3D 복원이 아닙니다."
+    "note": "Floor boundaries were estimated manually from an empty-store frame. Shelf sizes and aisle widths are schematic, not surveyed dimensions or an automatic 3D reconstruction."
   }
 }

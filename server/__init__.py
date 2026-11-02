@@ -1,1 +1,1 @@
-"""Store AI local video observation service."""
+"""tracker.ai local video observation service."""

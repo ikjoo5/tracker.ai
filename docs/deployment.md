@@ -1,35 +1,45 @@
-# GitHub Pages 배포
+# GitHub Pages deployment
 
-배포 대상은 `https://ikjoo5.github.io/cafe.ai/`입니다. GitHub Pages에는 정적 소개 페이지, 공개 예시 이미지·영상·데이터, 읽기 전용 워크스페이스를 배포합니다. FastAPI와 영상 추론 프로세스는 Pages에서 실행되지 않습니다.
+The project deployment target is `https://ikjoo5.github.io/cafe.ai/`. Pages hosts the static introduction, public example images/video/data, and a read-only analysis workspace. It does not run FastAPI or video inference.
 
-## 자동 배포 흐름
+The website and documentation are branded **tracker.ai**. The existing repository name and `/cafe.ai/` project path are intentionally preserved.
 
-[`pages.yml`](../.github/workflows/pages.yml)은 `main` 푸시 또는 수동 실행 시 다음 단계를 수행합니다.
+## Automated deployment
 
-1. Node.js 22와 lockfile 기준으로 `npm ci`
-2. 바닥 투영 검증 `npm run test:floor`
-3. `/cafe.ai/` 기본 경로와 정적 공개 모드로 Vite 빌드
-4. GitHub Pages 아티팩트 업로드
-5. `github-pages` 환경에 배포
+[`pages.yml`](../.github/workflows/pages.yml) runs on a push to `main` or a manual workflow dispatch:
 
-사용하는 빌드 변수는 다음과 같습니다. 비밀 값은 아닙니다.
+1. Set up Node.js 22 and install the lockfile with `npm ci`.
+2. Validate floor projection with `npm run test:floor`.
+3. Build Vite for `/cafe.ai/` in static showcase mode.
+4. Upload the Pages artifact.
+5. Deploy to the `github-pages` environment.
+
+The build uses these non-secret variables:
 
 ```text
 VITE_BASE_PATH=/cafe.ai/
 VITE_STATIC_SHOWCASE=true
 ```
 
-이미지·영상·데이터와 번들은 `import.meta.env.BASE_URL`을 기준으로 참조합니다. `#/workspace`는 같은 정적 페이지에서 저장된 공개 관찰 데이터를 열며, 로컬 분석 API로 요청하지 않습니다. 웹사이트에서 새 영상을 업로드해 추론하지 않습니다.
+Images, video, records, and JavaScript bundles use `import.meta.env.BASE_URL`. The `#/workspace` route opens previously collected public records without calling the local API. It cannot upload new footage for server inference.
 
-## 최초 활성화
+## First-time Pages activation
 
-저장소에 Pages가 활성화되지 않았다면 저장소 관리자 권한으로 **Settings → Pages → Build and deployment → Source → GitHub Actions**를 설정합니다. 그다음 `Deploy project site` 워크플로를 다시 실행할 수 있습니다.
+If Pages is not enabled, a repository administrator can select **Settings → Pages → Build and deployment → Source → GitHub Actions** for **`ikjoo5/cafe.ai`**. Then rerun the `Deploy project site` workflow.
 
-워크플로는 기본 `GITHUB_TOKEN`으로 배포하며 별도 개인 토큰을 요구하지 않습니다. 다만 Pages의 **최초 활성화**와 일반 배포 권한은 다릅니다. [공식 `actions/configure-pages@v5` 정의](https://github.com/actions/configure-pages/blob/v5/action.yml)에 따르면 `enablement: true`는 기본 `GITHUB_TOKEN` 외 토큰이 필요하므로 이 저장소의 워크플로는 자동 활성화 옵션을 사용하지 않습니다.
+Normal deployment uses the default `GITHUB_TOKEN` and does not require a personal token. First-time activation has different permissions: the [official `actions/configure-pages@v5` definition](https://github.com/actions/configure-pages/blob/v5/action.yml) states that `enablement: true` requires a token other than the default `GITHUB_TOKEN`. The workflow therefore does not attempt automatic activation.
 
-필요한 Actions 권한은 빌드의 `contents: read`와 Pages 설정 조회용 `pages: read`, 배포의 `pages: write`와 `id-token: write`입니다. 조직 정책이나 환경 승인 규칙이 추가되어 있다면 해당 저장소의 정책을 따릅니다.
+The build job has `contents: read` and `pages: read`. Deployment uses `pages: write` and `id-token: write`. Repository or organization environment-approval rules still apply.
 
-## 로컬에서 배포 결과 확인
+## Cloud network access is a separate setting
+
+Pages activation is a **GitHub repository setting**. Allowing the agent to call GitHub’s API or verify the published URL is a **cloud environment network setting**.
+
+The saved cloud configuration draft adds `api.github.com` and `ikjoo5.github.io` to the permitted destinations. Saving the draft does not apply it to a running instance: review and save the environment settings, then publish the cloud environment to activate that configuration. This network change grants access to those destinations; it does not modify the personal website or its repository.
+
+Do not paste tokens into chat. Reuse the platform’s existing GitHub connection and inspect the actual failing operation before requesting additional permissions.
+
+## Preview the deployment locally
 
 ```bash
 npm ci
@@ -37,23 +47,25 @@ VITE_BASE_PATH=/cafe.ai/ VITE_STATIC_SHOWCASE=true npm run build
 VITE_BASE_PATH=/cafe.ai/ npm run preview
 ```
 
-미리보기 서버에서 `/cafe.ai/` 경로를 열어 이미지·동영상·다운로드·워크스페이스를 확인합니다. 소개 페이지의 데모 영상은 실제 Intel 매장 영상에서 생성한 BBox 영상이며, 개념 이미지는 실제 측정값으로 표기하지 않습니다.
+Open the preview server’s `/cafe.ai/` path and check images, video, downloads, and the workspace. The demo is actual Intel store footage processed by the detector. Concept images are separately labeled and are not presented as measured output.
 
-## 배포 상태 확인
+## Verify publication
 
-소스 푸시 성공과 웹사이트 배포 성공은 별개입니다. 저장소 **Actions**에서 `Deploy project site`의 실행 결과를 확인하고, 성공한 `deploy` 작업의 `page_url`과 실제 사이트 응답을 확인해야 합니다. 실패한 경우 빌드·Pages 설정·권한·환경 규칙 중 실제 실패한 단계를 기준으로 진단합니다.
+A successful source push is not proof of website publication. Check `Deploy project site` under the repository’s **Actions**, inspect its successful deployment `page_url`, and verify the site response. Diagnose the actual failing stage: build, Pages configuration, permissions, or environment rules.
 
-## 로컬 분석과 공개 사이트의 차이
+Commit `3e56c37` uploaded the initial source, pipeline documentation, and website configuration. Live publication was not confirmed while API and site requests were blocked by the cloud network policy. English branding updates do not themselves establish a successful deployment.
 
-| 기능 | 공개 Pages | 로컬 개발 환경 |
+## Public site and local workspace
+
+| Capability | Public Pages site | Local development |
 | --- | --- | --- |
-| 파이프라인 소개·이미지·데모 영상 | 지원 | 지원 |
-| 저장된 공개 데이터·3D 체류맵 | 읽기 전용 | 지원 |
-| 새 CCTV 영상 업로드·CPU 추론 | 미지원 | FastAPI로 지원 |
-| 개인 업로드 파일 저장 | 없음 | Git에서 제외된 로컬 디렉터리 |
+| Pipeline explanation, images, demo video | Available | Available |
+| Saved public records and 3D dwell map | Read-only | Available |
+| New video upload and CPU inference | Unavailable | Available through FastAPI |
+| Storage of private uploaded footage | None | Local directories excluded from Git |
 
-추론 API를 외부 서비스로 공개하려면 인증·사용자별 데이터 격리·보존기간·비동기 작업 관리 등을 별도로 구현해야 합니다. 현재 Pages 배포는 해당 API를 노출하지 않습니다.
+Publishing the inference API would require separate authentication, user data isolation, retention controls, and asynchronous job management. The Pages deployment does not expose that API.
 
-## 기존 자기소개 사이트 보존
+## Preserve the personal homepage
 
-이 배포는 `ikjoo5/cafe.ai` 저장소의 `/cafe.ai/` 프로젝트 경로만 대상으로 합니다. `ikjoo5/ikjoo5.github.io` 저장소, 루트 자기소개 페이지, CNAME·사용자 사이트 설정은 변경하지 않습니다.
+This deployment targets only the `/cafe.ai/` project path of the **`ikjoo5/cafe.ai`** repository. It does not change the **`ikjoo5/ikjoo5.github.io`** repository, the root personal homepage, CNAME, or user-site settings.

@@ -20,7 +20,7 @@ def setup():
             print(f"Verified: {name}")
             continue
         url = f"https://raw.githubusercontent.com/chuanqi305/MobileNet-SSD/{MODEL_REVISION}/{name}"
-        request = urllib.request.Request(url, headers={"User-Agent": "StoreAI-ModelSetup/0.1"})
+        request = urllib.request.Request(url, headers={"User-Agent": "TrackerAI-ModelSetup/0.1"})
         descriptor, temporary = tempfile.mkstemp(prefix="model-", dir=MODEL_DIR)
         digest = hashlib.sha256()
         try:

@@ -18,9 +18,9 @@ W, H = 1800, 1010
 paper, ink, muted = '#f7f7ef', '#25352d', '#748171'
 image = Image.new('RGB', (W, H), paper)
 draw = ImageDraw.Draw(image)
-draw.text((68, 40), 'ACTUAL OBSERVATIONS / TIME ACCUMULATION', font=font(19, True), fill='#de8253')
-draw.text((65, 86), '관찰이 쌓이면, 공간의 패턴이 보입니다.', font=font(42, True), fill=ink)
-draw.text((68, 154), '동일한 실제 영상의 누적 구간 · 발 위치 추정과 수동 원근 보정 · 전체 52초와 같은 색상 범위', font=font(21), fill=muted)
+draw.text((68, 40), 'TRACKER.AI / ACTUAL OBSERVATION ACCUMULATION', font=font(19, True), fill='#de8253')
+draw.text((65, 86), 'Spatial patterns emerge as observations accumulate.', font=font(40, True), fill=ink)
+draw.text((68, 154), 'Real footage · estimated footpoints · manual perspective calibration · a shared 52-second color scale', font=font(19), fill=muted)
 palette = [(0, (49,82,211)), (.24,(23,163,224)), (.46,(69,209,171)), (.66,(247,226,66)), (.83,(252,143,39)), (1,(225,57,43))]
 
 def colorize(grid):
@@ -56,8 +56,8 @@ for i, stage in enumerate(data['stages']):
     draw.rectangle((fx,fy,fx+fw,fy+fh),outline='#c5cfbb',width=2)
     draw.text((fx+154,fy-24),'FAR / REAR',font=font(11,True),fill='#7c8970')
     draw.text((fx+144,fy+fh+7),'NEAR / CAMERA',font=font(11,True),fill='#7c8970')
-    draw.text((left+28,top+548),f"{stage['detections']}건 관찰 → {stage['mappedObservations']}건 투영",font=font(23,True),fill=ink)
-    draw.text((left+28,top+590),f"누적 {stage['mappedPersonSeconds']:.1f}인·초  /  {stage['sampledFrames']}개 표본 프레임",font=font(17),fill=muted)
+    draw.text((left+28,top+548),f"{stage['detections']} detections → {stage['mappedObservations']} mapped",font=font(22,True),fill=ink)
+    draw.text((left+28,top+590),f"{stage['mappedPersonSeconds']:.1f} person-seconds  /  {stage['sampledFrames']} sampled frames",font=font(16),fill=muted)
 
 gx, gy, gw = 70, 892, 470
 gradient = Image.new('RGB',(gw,18))
@@ -67,9 +67,9 @@ for x in range(gw):
     rgb=tuple(int(np.interp(level,[a[0] for a in palette],[a[1][c] for a in palette])) for c in range(3))
     for y in range(18):pixels[x,y]=rgb
 image.paste(gradient,(gx,gy))
-draw.text((gx,gy+28),'낮은 상대 체류',font=font(16),fill=muted)
-draw.text((gx+344,gy+28),'높은 상대 체류',font=font(16),fill=muted)
-draw.text((610,887),'실제 관찰값만 누적 · 잘린 발과 보정 영역 밖 관찰은 제외',font=font(19,True),fill='#65765d')
-draw.text((610,921),'배치와 원근은 수동 재구성입니다. 실측 밀도·구매 의도·방문자 수를 의미하지 않습니다.',font=font(16),fill=muted)
+draw.text((gx,gy+28),'Lower relative dwell',font=font(16),fill=muted)
+draw.text((gx+296,gy+28),'Higher relative dwell',font=font(16),fill=muted)
+draw.text((610,887),'Observed samples only · clipped feet and out-of-floor points excluded',font=font(18,True),fill='#65765d')
+draw.text((610,921),'Schematic layout and manual projection. Not surveyed density, purchase intent or visitor counts.',font=font(15),fill=muted)
 draw.text((68,976),'Source: Intel IoT DevKit / sample-videos · CC BY 4.0 · modified analysis illustration · source.json / license.txt',font=font(12),fill='#8c9783')
 image.save(out,optimize=True)

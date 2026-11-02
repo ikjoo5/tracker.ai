@@ -151,7 +151,7 @@ def draw_hud(frame: np.ndarray, people: list[dict], time: float, duration: float
     footer_top = height-footer_height
     panel(frame, (0, footer_top, width, height), 1)
     cv2.rectangle(frame, (17, 17), (29, 29), ACCENT_COLOR, -1)
-    text(frame, "STORE.AI", (39, 30), .58, TEXT_COLOR, 2)
+    text(frame, "TRACKER.AI", (39, 30), .58, TEXT_COLOR, 2)
     text(frame, "CUMULATIVE DWELL HEATMAP" if heatmap else "PERSON TRACKING", (170, 29), .52)
     badge = "PUBLIC RETAIL DEMO" if public_retail else ("SYNTHETIC DEMO" if synthetic else "UPLOADED VIDEO")
     badge_scale = .35 if public_retail else .42
