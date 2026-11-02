@@ -6,13 +6,13 @@ A prototype pipeline from CCTV footage to person detection, temporary tracks, ob
 
 ## Background and vision
 
-Retail businesses in many advanced economies face pressure from labor costs. For owner-operated stores in South Korea, hiring additional staff can be a significant financial commitment. Keeping teams small, however, can leave a few employees handling many tasks and unpredictable peaks in demand.
+Retail businesses in many advanced economies face pressure from **labor costs**. For owner-operated stores in South Korea, hiring additional staff can be a significant financial commitment. Keeping teams small, however, can leave a few employees handling many tasks and unpredictable peaks in demand.
 
-Heavy workloads can contribute to turnover, placing further pressure on the remaining team. Without reliable information about customer demand and how work is distributed throughout the day, owners may find it difficult to determine when additional staffing would make the greatest difference.
+**Heavy workloads** can contribute to **turnover**, placing further pressure on the remaining team. Without reliable information about customer demand and how work is distributed throughout the day, owners may find it difficult to determine when additional staffing would make the greatest difference.
 
-tracker.ai was developed to help close this information gap. Its long-term goal is to combine video-derived observations—such as customer traffic, staff movement, and task flow—with POS transactions, sales, and other store data through multimodal analysis. The aim is to support hourly staffing recommendations and operational reports that help balance workloads, improve service, and identify opportunities for revenue growth.
+tracker.ai was developed to help close this information gap. Its **long-term goal** is to combine video-derived observations—such as customer traffic, staff movement, and task flow—with POS transactions, sales, and other store data through **multimodal analysis**. The aim is to support **hourly staffing recommendations** and **operational reports** that help balance workloads, improve service, and identify opportunities for **revenue growth**.
 
-**Current stage:** The prototype currently focuses on collecting person tracks and visualizing movement and dwell patterns as heatmaps. POS integration, staff-specific workflow analysis, staffing recommendations, and business reporting remain planned capabilities.
+**Current stage:** The prototype currently focuses on collecting **person tracks** and visualizing movement and dwell patterns as **heatmaps**. POS integration, staff-specific workflow analysis, staffing recommendations, and business reporting remain **planned capabilities**.
 
 [Project site deployment target](https://ikjoo5.github.io/tracker.ai/) · [Pipeline documentation](docs/pipeline.md) · [Deployment guide](docs/deployment.md)
 
